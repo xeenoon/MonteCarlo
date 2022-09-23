@@ -35,6 +35,15 @@ namespace MonteCarlo
             this.win_requirement = win_requirement;
             empty_squares = Enumerable.Range(0, height * width).ToList();
         }
+
+        private BackendBoard(int height, int width, int win_requirement, int[] board, List<int> emptySquares)
+        {
+            this.height = height;
+            this.width = width;
+            this.board = board;
+            this.win_requirement = win_requirement;
+            this.empty_squares = emptySquares;
+        }
         public void Move(int position, int hasmove)
         {
             board[position] = hasmove;
@@ -149,6 +158,11 @@ namespace MonteCarlo
             }
 
             return FindDuplicates(startposition+direction, endposition, side, direction, duplicatesfound);
+        }
+
+        public BackendBoard Flipped()
+        {
+            return new BackendBoard(height, width, win_requirement, board.Select(n=>n*-1).ToArray(), empty_squares.Copy());
         }
     }
 }
