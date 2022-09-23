@@ -10,7 +10,7 @@ namespace MonteCarlo
             InitializeComponent();
         }
         System.Timers.Timer checkmateTimer = new System.Timers.Timer();
-        Side won = Side.None;
+        int won = 0;
         bool runagain = true;
 
         bool humanfirst = true;
@@ -22,7 +22,7 @@ namespace MonteCarlo
                 connectBoard.Draw(e.Graphics);
                 if (!humanfirst)
                 {
-                    var otherturn = hasturn == Side.Red ? Side.Green : Side.Red;
+                    var otherturn = -hasturn;
                     int position = MiniMax.BestMove(connectBoard.backendBoard, otherturn);
                     if (position == -1)
                     {
@@ -37,12 +37,9 @@ namespace MonteCarlo
             {
                 connectBoard.Paint(e.Graphics);
             }
-            if (won == Side.None) 
+            if (connectBoard.backendBoard.IsFinished() && runagain)
             {
-                won = connectBoard.backendBoard.Victory();
-            }
-            if (won != Side.None && runagain)
-            {
+                won = connectBoard.backendBoard.GetReward(1);
                 runagain = false;
                 checkmateTimer = new System.Timers.Timer(100);
                 checkmateTimer.Elapsed += new ElapsedEventHandler(TimerElapsed);
@@ -55,22 +52,22 @@ namespace MonteCarlo
         {
             checkmateTimer.Stop();
             messageshowing = true;
-            if (won == (Side.Red | Side.Green))
+            if (won == 0)
             {
                 MessageBox.Show(String.Format("Tis a draw"), "Draw");
             }
             else
             {
-                MessageBox.Show(String.Format("{0} won", won), "Victory");
+                MessageBox.Show(String.Format("{0} won", won == -1 ? "Opponent" : "You"), "Victory");
             }
             messageshowing = false;
             connectBoard = null;
             runagain = true;
-            won = Side.None;
+            won = 0;
             humanfirst = !humanfirst;
             Invalidate();
         }
-        Side hasturn = Side.Red;
+        int hasturn = 1;
         private void Form1_Click(object sender, EventArgs e)
         {
             Square square = connectBoard.SquareAt(((MouseEventArgs)e).Location);

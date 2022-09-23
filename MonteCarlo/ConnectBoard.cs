@@ -6,14 +6,6 @@ using System.Threading.Tasks;
 
 namespace MonteCarlo
 {
-    [Flags]
-    public enum Side
-    {
-        None = 0,
-        Red = 1,
-        Green = 2,
-    }
-
     internal class ConnectBoard
     {
         public int height;
@@ -86,7 +78,7 @@ namespace MonteCarlo
         public Pen background;
         public Pen colour;
 
-        public Side side = Side.None;
+        public int side = 0;
         public ConnectBoard connectBoard;
 
         public Square(int location, Rectangle bounds, Pen background, Pen colour, ConnectBoard connectBoard)
@@ -104,28 +96,28 @@ namespace MonteCarlo
             g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
             g.FillRectangle(colour.Brush, bounds);
             g.DrawRectangle(background, bounds);
-            if (side == Side.None) 
+            if (side == 0) 
             {
                 g.FillEllipse(background.Brush, bounds.X + bounds.Width / 6f, bounds.Y + bounds.Height / 6f, bounds.Width / 1.5f, bounds.Height / 1.5f);
             }
-            else if(side == Side.Red)
+            else if(side == 1)
             {
                 g.FillEllipse(new Pen(Color.Red).Brush, bounds.X + bounds.Width / 6f, bounds.Y + bounds.Height / 6f, bounds.Width / 1.5f, bounds.Height / 1.5f);
             }
-            else if (side == Side.Green)
+            else if (side == -1)
             {
                 g.FillEllipse(new Pen(Color.Green).Brush, bounds.X + bounds.Width / 6f, bounds.Y + bounds.Height / 6f, bounds.Width / 1.5f, bounds.Height / 1.5f);
             }
             g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.Default;
         }
 
-        internal void Click(Side hasturn)
+        internal void Click(int hasturn)
         {
-            if (side == Side.None)
+            if (side == 0) //Currently empty
             {
                 side = hasturn;
                 connectBoard.backendBoard.Move(location,side);
-                var otherturn = hasturn == Side.Green ? Side.Red : Side.Green;
+                var otherturn = -hasturn;
                 int position = MiniMax.BestMove(connectBoard.backendBoard, otherturn);
                 if (position == -1)
                 {

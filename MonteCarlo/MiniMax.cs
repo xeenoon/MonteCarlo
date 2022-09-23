@@ -8,21 +8,20 @@ namespace MonteCarlo
 {
     public class MiniMax
     {
-        public static int BestMove(BackendBoard backendBoard, Side s)
+        public static int BestMove(BackendBoard backendBoard, int s)
         {
-            if (backendBoard.Victory() != Side.None)
+            if (backendBoard.IsFinished())
             {
                 return -1;
             }
 
             int bestmove = 0;
             int max = int.MinValue;
-            int movecount = backendBoard.empty_squares.Count;
             for (int i = 0; i < backendBoard.empty_squares.Count; i++)
             {
                 int move = backendBoard.empty_squares[0];
                 backendBoard.Move(move, s);
-                var score = -maxi(2, backendBoard, s == Side.Red ? Side.Green : Side.Red);
+                var score = -maxi(2, backendBoard, -s);
                 backendBoard.UndoMove(move);
                 if (score > max)
                 {
@@ -32,9 +31,9 @@ namespace MonteCarlo
             }
             return bestmove;
         }
-        static int maxi(int depth, BackendBoard backendBoard, Side hasmove)
+        static int maxi(int depth, BackendBoard backendBoard, int hasmove)
         {
-            if (depth == 0 || backendBoard.empty_squares.Count == 0 || backendBoard.Victory() != Side.None)
+            if (depth == 0 || backendBoard.empty_squares.Count == 0 || backendBoard.IsFinished())
             {
                 return Evaluate(backendBoard);
             }
@@ -43,7 +42,7 @@ namespace MonteCarlo
             {
                 int move = backendBoard.empty_squares[0];
                 backendBoard.Move(move, hasmove);
-                var score = mini(depth - 1, backendBoard, hasmove == Side.Red ? Side.Green : Side.Red);
+                var score = mini(depth - 1, backendBoard, -hasmove);
                 backendBoard. UndoMove(move);
                 if (score > max)
                 {
@@ -53,9 +52,9 @@ namespace MonteCarlo
             return max;
         }
 
-        static int mini(int depth, BackendBoard backendBoard, Side hasmove)
+        static int mini(int depth, BackendBoard backendBoard, int hasmove)
         {
-            if (depth == 0 || backendBoard.empty_squares.Count == 0 || backendBoard.Victory() != Side.None)
+            if (depth == 0 || backendBoard.empty_squares.Count == 0 || backendBoard.IsFinished())
             {
                 return Evaluate(backendBoard);
             }
@@ -64,7 +63,7 @@ namespace MonteCarlo
             {
                 int move = backendBoard.empty_squares[0];
                 backendBoard.Move(move, hasmove);
-                var score = maxi(depth - 1, backendBoard, hasmove == Side.Red ? Side.Green : Side.Red);
+                var score = maxi(depth - 1, backendBoard, -hasmove);
                 backendBoard.UndoMove(move);
                 if (score < min)
                 {
@@ -75,17 +74,13 @@ namespace MonteCarlo
         }
         public static int Evaluate(BackendBoard backendBoard)
         {
-            Side winner = backendBoard.Victory();
-            switch (winner)
+            var winner = backendBoard.GameResult();
+            if (winner.finished)
             {
-                case Side.None:
-                    return 0;
-                case Side.Red:
-                    return 1;
-                case Side.Green:
-                    return -1;
+                return winner.player_won;
             }
-            return 0; //wot?
+
+            return 0; //Game unfinished
         }
     }
 }
