@@ -168,13 +168,13 @@ namespace MonteCarlo
                         //ZOOM IN AND ENHANCE
                         //(Expand)
 
-                        m_action = model.Predict(board_state.board);
+                        m_action = model.Predict(nextboardstate.board);
                         action_probs = m_action.probabilities;
                         value = m_action.v;
-                        validmoves = board_state.ValidMoves();
+                        validmoves = nextboardstate.ValidMoves();
                         action_probs = MultiplyArry(action_probs, validmoves);
                         action_probs = DivideArry(action_probs, action_probs.Sum());
-                        root.Expand(board_state, toplay, np.array<double>(action_probs));
+                        root.Expand(nextboardstate, toplay, np.array<double>(action_probs));
                     }
                     BackPropogate(searchpath, value,parent.toplay *-1);
                 }

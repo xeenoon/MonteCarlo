@@ -186,8 +186,9 @@ namespace MonteCarlo
         {
             int[] b = board.Select(n => n * -1).ToArray();
 
-            Move(action, player);
-            return new BackendBoard(height, width, 2, b, empty_squares.Copy());
+            BackendBoard backendBoard = new BackendBoard(height, width, 2, b, empty_squares.Copy());
+            backendBoard.Move(action, player);
+            return backendBoard;
         }
     }
 }

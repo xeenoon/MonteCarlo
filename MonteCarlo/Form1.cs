@@ -8,8 +8,7 @@ namespace MonteCarlo
         public Form1()
         {
             InitializeComponent();
-            bool worked = MCTS_Tests.Test1();
-
+            bool worked = MCTS_Tests.Test2();
         }
         System.Timers.Timer checkmateTimer = new System.Timers.Timer();
         int won = 0;
