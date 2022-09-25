@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Numpy;
 
 namespace MonteCarlo
 {
@@ -26,7 +27,23 @@ namespace MonteCarlo
         public int[] board;
 
         public List<int> empty_squares = new List<int>();
-
+        public int[] ValidMoves()
+        {
+            int[] validMoves = new int[board.Length];
+            for (int i = 0; i < board.Length; i++)
+            {
+                int token = board[i];
+                if (token == 0)
+                {
+                    validMoves[i] = 1; //Available space
+                }
+                else
+                {
+                    validMoves[i] = 0;
+                }
+            }
+            return validMoves;
+        }
         public BackendBoard(int height, int width, int win_requirement)
         {
             this.height = height;
@@ -163,6 +180,14 @@ namespace MonteCarlo
         public BackendBoard Flipped()
         {
             return new BackendBoard(height, width, win_requirement, board.Select(n=>n*-1).ToArray(), empty_squares.Copy());
+        }
+
+        public BackendBoard NextState(int player, int action)
+        {
+            int[] b = board.Select(n => n * -1).ToArray();
+
+            Move(action, player);
+            return new BackendBoard(height, width, 2, b, empty_squares.Copy());
         }
     }
 }
