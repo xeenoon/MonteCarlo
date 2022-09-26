@@ -20,30 +20,36 @@ namespace MonteCarlo
             this.v = v;
         }
     }
-    public class TorchNetwork : Model
+    public class TorchNetwork : nn.Module
     {
         private int boardsize;
         private int actionsize;
-        private nn.Module network;
         private Linear fc1;
         private Linear fc2;
 
         public Linear actionHead;
         private Linear valueHead;
 
-        private Device device;
+        public Device device;
 
-        public TorchNetwork(int boardsize, int actionsize, nn.Module network, Device device)
+        public TorchNetwork(string name, int boardsize, int actionsize, Device device) : base(name)
         {
-            //super(Connect2Model, self).__init__()
             this.boardsize = boardsize;
             this.actionsize = actionsize;
-            this.network = network;
             this.fc1 = nn.Linear(boardsize, 16);
             this.fc2 = nn.Linear(16, 16);
+
+
+            this.actionHead = nn.Linear(16, actionsize);
+            this.valueHead = nn.Linear(16, 1);
+
+            this.to(device);
             this.device = device;
+
+            this.name = name;
         }
-        public struct TensorTuple //tfw
+
+        public struct TensorTuple
         {
             public Tensor tensor1;
             public Tensor tensor2;
@@ -56,18 +62,17 @@ namespace MonteCarlo
         }
         public TensorTuple Foward(Tensor x)
         {
-            x = nn.functional.relu(fc1.forward(x));
-            x = nn.functional.relu(fc2.forward(x)); //.foward????? only method that works
+            x = nn.functional.relu(fc1.cpu().forward(x));
+            x = nn.functional.relu(fc2.cpu().forward(x)); //.foward????? only method that works
 
             var action_logits = actionHead.forward(x);
             var value_logit = valueHead.forward(x);
 
-            return new TensorTuple(nn.functional.softmax(action_logits, 1), tanh(value_logit));
+            return new TensorTuple(torch.flatten(action_logits, 1), tanh(value_logit));
         }
-        public DoubleTuple Predict(int[] board) //From my knowledge of neural networks, this SHOULD return a float?
-                                               //His code returns a tuple of something, probably two floats?
+        public DoubleTuple Predict(Array data)
         {
-            Tensor board_tensor = tensor(board).to(device); //Could not find 'FloatTensor' after extensive research, discovered it was obselete
+            Tensor board_tensor = from_array(data).to(device); //Could not find 'FloatTensor' after extensive research, discovered it was obselete
             no_grad(); //Disable gradients
             var tuple = Foward(board_tensor);
             enable_grad(); //Re-enable gradients
@@ -75,12 +80,7 @@ namespace MonteCarlo
             var x = tuple.tensor1.cpu().data<double>().ToArray(); //Probability representation in board int[] format
             var y = tuple.tensor2.cpu().data <double>()[0]; //Array only ever has one item
 
-            return new DoubleTuple(x,y); //I honestly have no idea wtf is going on here
+            return new DoubleTuple(x,y);
         }
-    }
-
-    public interface Model
-    {
-        public abstract DoubleTuple Predict(int[] board);
     }
 }

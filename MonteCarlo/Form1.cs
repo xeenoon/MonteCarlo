@@ -1,4 +1,6 @@
 using System.Timers;
+using TorchSharp;
+
 namespace MonteCarlo
 {
     public partial class Form1 : Form
@@ -8,7 +10,22 @@ namespace MonteCarlo
         public Form1()
         {
             InitializeComponent();
-            bool worked = MCTS_Tests.Test2();
+
+            var device = torch.device("cpu");
+            Dictionary<string, int> args = new Dictionary<string, int>()
+            {
+                {"batch_size",64},
+                {"numIters",5},
+                {"num_simulations",100},
+                {"numEps",100},
+                {"numItersForTrainExamplesHistory",20},
+                {"epochs",2},
+            };
+            var game = new BackendBoard(1,4,2);
+            var model = new TorchNetwork("bob",4,4,device);
+
+            var trainer = new Trainer(game, model, args);
+            trainer.Learn();
         }
         System.Timers.Timer checkmateTimer = new System.Timers.Timer();
         int won = 0;

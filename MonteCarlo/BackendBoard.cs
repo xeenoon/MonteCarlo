@@ -18,7 +18,7 @@ namespace MonteCarlo
             this.player_won = player_won;
         }
     }
-    public class BackendBoard
+    public struct BackendBoard
     {
         public int height;
         public int width;

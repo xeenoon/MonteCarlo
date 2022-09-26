@@ -119,15 +119,15 @@ namespace MonteCarlo
         public class MCTS
         {
             public BackendBoard board;
-            public Model connect2board;
+            public TorchNetwork connect2board;
             public Dictionary<string, int> args; //Potentially add extra arguments at some points
-            public MCTS(BackendBoard backendBoard, Model torchNetwork, Dictionary<string, int> args)
+            public MCTS(BackendBoard backendBoard, TorchNetwork torchNetwork, Dictionary<string, int> args)
             {
                 this.board = backendBoard;
                 this.connect2board = torchNetwork;
                 this.args = args;
             }
-            public Node Run(Model model, BackendBoard board_state, int toplay)
+            public Node Run(TorchNetwork model, BackendBoard board_state, int toplay)
             {
                 var root = new Node(0,toplay);
      
@@ -136,8 +136,8 @@ namespace MonteCarlo
                 var action_probs = m_action.probabilities;
                 var value = m_action.v;
                 var validmoves = board_state.ValidMoves();
-                action_probs = MultiplyArry(action_probs, validmoves);
-                action_probs = DivideArry(action_probs, action_probs.Sum());
+                action_probs = action_probs.Multiply(validmoves);
+                action_probs = action_probs.Divide(action_probs.Sum());
                 root.Expand(board_state, toplay, np.array<double>(action_probs));
 
                 //Run simulations
@@ -172,8 +172,8 @@ namespace MonteCarlo
                         action_probs = m_action.probabilities;
                         value = m_action.v;
                         validmoves = nextboardstate.ValidMoves();
-                        action_probs = MultiplyArry(action_probs, validmoves);
-                        action_probs = DivideArry(action_probs, action_probs.Sum());
+                        action_probs = action_probs.Multiply(validmoves);
+                        action_probs = action_probs.Divide(action_probs.Sum());
                         root.Expand(nextboardstate, toplay, np.array<double>(action_probs));
                     }
                     BackPropogate(searchpath, value,parent.toplay *-1);
@@ -189,30 +189,6 @@ namespace MonteCarlo
                     node.valuesum += (node.toplay == toplay ? value : -value);
                     node.visitCount++;
                 }
-            }
-
-            public double[] MultiplyArry(double[] prob, int[] mask)
-            {
-                double[] result = new double[prob.Length];
-                for (int i = 0; i < prob.Length; ++i)
-                {
-                    if (mask[i] == 1) //Can have item
-                    {
-                        result[i] = prob[i]; //Add the item
-                    }
-                    //Otherwise it will stay as a zero
-                }
-                return result;
-            }
-            public double[] DivideArry(double[] prob, double num)
-            {
-                double[] result = new double[prob.Length];
-                for (int i = 0; i < prob.Length; ++i)
-                {
-
-                    result[i] = prob[i] / num; //Add the item
-                }
-                return result;
             }
         }
     }

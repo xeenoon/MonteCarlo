@@ -9,9 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AWSSDK.MachineLearning" Version="3.7.1.206" />
-    <PackageReference Include="Microsoft.ML" Version="1.7.1" />
     <PackageReference Include="Numpy" Version="3.10.1.30" />
-    <PackageReference Include="TorchSharp" Version="0.97.6" />
+    <PackageReference Include="TorchSharp-cuda-windows" Version="0.97.6" />
   </ItemGroup>
 </Project>
