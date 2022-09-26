@@ -11,10 +11,10 @@ namespace MonteCarlo
 {
     public class DoubleTuple
     {
-        public double[] probabilities;
-        public double v;
+        public float[] probabilities;
+        public float v;
 
-        public DoubleTuple(double[] x, double v)
+        public DoubleTuple(float[] x, float v)
         {
             this.probabilities = x;
             this.v = v;
@@ -32,7 +32,7 @@ namespace MonteCarlo
 
         public Device device;
 
-        public TorchNetwork(string name, int boardsize, int actionsize, Device device) : base(name)
+        public TorchNetwork(string name, int boardsize, int actionsize) : base(name)
         {
             this.boardsize = boardsize;
             this.actionsize = actionsize;
@@ -43,8 +43,8 @@ namespace MonteCarlo
             this.actionHead = nn.Linear(16, actionsize);
             this.valueHead = nn.Linear(16, 1);
 
-            this.to(device);
-            this.device = device;
+            this.to(torch.device("cpu"));
+            this.device = torch.device("cpu");
 
             this.name = name;
         }
@@ -68,7 +68,12 @@ namespace MonteCarlo
             var action_logits = actionHead.forward(x);
             var value_logit = valueHead.forward(x);
 
-            return new TensorTuple(torch.flatten(action_logits, 1), tanh(value_logit));
+            Tensor tanh_v = tanh(value_logit);
+            
+            using Softmax softmax = nn.Softmax(0);
+
+            Tensor tensor_v = softmax.forward(action_logits);
+            return new TensorTuple(tensor_v, tanh_v);
         }
         public DoubleTuple Predict(Array data)
         {
@@ -77,8 +82,8 @@ namespace MonteCarlo
             var tuple = Foward(board_tensor);
             enable_grad(); //Re-enable gradients
             
-            var x = tuple.tensor1.cpu().data<double>().ToArray(); //Probability representation in board int[] format
-            var y = tuple.tensor2.cpu().data <double>()[0]; //Array only ever has one item
+            var x = tuple.tensor1.cpu().data<float>().ToArray(); //Probability representation in board int[] format
+            var y = tuple.tensor2.cpu().data <float>()[0]; //Array only ever has one item
 
             return new DoubleTuple(x,y);
         }

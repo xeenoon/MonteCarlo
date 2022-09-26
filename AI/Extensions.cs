@@ -4,10 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TorchSharp;
 
 namespace MonteCarlo
 {
-    internal static class Extensions
+    public static class Extensions
     {
         public static List<int> Copy(this List<int> tocopy)
         {
@@ -64,7 +65,18 @@ namespace MonteCarlo
                 list.Add(array.item<T>(i)); //Just a foreach
             }
             return list;
+        
         }
+        public static List<float> ToList(this torch.Tensor array)
+        {
+            List<float> list = new List<float>();
+            for (int i = 0; i < array.size(0); ++i)
+            {
+                list.Add(array[i].item<float>()); //Just a foreach
+            }
+            return list;
+        }
+
         public static float[,] TwoDimensional(this float[][] arry)
         {
             float[,] result = new float[arry.Length, arry[0].Length];
@@ -77,6 +89,19 @@ namespace MonteCarlo
                     result[col, row] = item;
                 }
             }
+            return result;
+        }
+
+        public static string Write(this Array array)
+        {
+            string result = "[";
+            foreach (var item in array)
+            {
+                result += item.ToString();
+                result += ",";
+            }
+            result = result.Substring(0,result.Length-1);
+            result += "]";
             return result;
         }
     }

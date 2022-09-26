@@ -181,10 +181,14 @@ namespace MonteCarlo
         {
             return new BackendBoard(height, width, win_requirement, board.Select(n=>n*-1).ToArray(), empty_squares.Copy());
         }
+        public BackendBoard Flipp(int player)
+        {
+            return new BackendBoard(height, width, win_requirement, board.Select(n => n * player).ToArray(), empty_squares.Copy());
+        }
 
         public BackendBoard NextState(int player, int action)
         {
-            float[] b = board.Select(n => n * -1).ToArray();
+            float[] b = board.Select(n => n).ToArray(); //Copy board
 
             BackendBoard backendBoard = new BackendBoard(height, width, 2, b, empty_squares.Copy());
             backendBoard.Move(action, player);

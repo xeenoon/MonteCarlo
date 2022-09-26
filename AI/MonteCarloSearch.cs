@@ -101,7 +101,7 @@ namespace MonteCarlo
                 }
                 return new KeyValuePair<int, Node>(best_action, best_child);
             }
-            public void Expand(BackendBoard board_state, int toplay, NDarray<double> action_probs)
+            public void Expand(BackendBoard board_state, int toplay, NDarray<float> action_probs)
             {
                 this.toplay = toplay;
                 this.board_state = board_state;
@@ -138,7 +138,7 @@ namespace MonteCarlo
                 var validmoves = board_state.ValidMoves();
                 action_probs = action_probs.Multiply(validmoves);
                 action_probs = action_probs.Divide(action_probs.Sum());
-                root.Expand(board_state, toplay, np.array<double>(action_probs));
+                root.Expand(board_state, toplay, np.array<float>(action_probs));
 
                 //Run simulations
                 for (int i = 0; i < args["num_simulations"]; ++i)
@@ -162,7 +162,7 @@ namespace MonteCarlo
 
                     //Get value of the board state from the perspective of the other player
                     value = nextboardstate.GetReward(1);
-                    if (value == 0)
+                    if (value == 0 && nextboardstate.empty_squares.Count >= 1)
                     {
                         //Game has not ended
                         //ZOOM IN AND ENHANCE
@@ -174,7 +174,7 @@ namespace MonteCarlo
                         validmoves = nextboardstate.ValidMoves();
                         action_probs = action_probs.Multiply(validmoves);
                         action_probs = action_probs.Divide(action_probs.Sum());
-                        root.Expand(nextboardstate, toplay, np.array<double>(action_probs));
+                        root.Expand(nextboardstate, toplay, np.array<float>(action_probs));
                     }
                     BackPropogate(searchpath, value,parent.toplay *-1);
                 }

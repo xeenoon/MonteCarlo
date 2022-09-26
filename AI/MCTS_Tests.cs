@@ -14,9 +14,9 @@ namespace MonteCarlo
     {
         class MockModel
         {
-            double[] mockdata;
-            double mockvalue;
-            public MockModel(string name, double[] mockdata, double mockvalue)
+            float[] mockdata;
+            float mockvalue;
+            public MockModel(string name, float[] mockdata, float mockvalue)
             {
                 this.mockdata = mockdata;
                 this.mockvalue = mockvalue;

@@ -16,7 +16,7 @@ namespace MonteCarlo
             }
 
             int bestmove = 0;
-            int max = int.MinValue;
+            float max = float.MinValue;
             for (int i = 0; i < backendBoard.empty_squares.Count; i++)
             {
                 int move = backendBoard.empty_squares[0];
@@ -31,13 +31,13 @@ namespace MonteCarlo
             }
             return bestmove;
         }
-        static int maxi(int depth, BackendBoard backendBoard, int hasmove)
+        static float maxi(int depth, BackendBoard backendBoard, int hasmove)
         {
             if (depth == 0 || backendBoard.empty_squares.Count == 0 || backendBoard.IsFinished())
             {
                 return Evaluate(backendBoard);
             }
-            int max = int.MinValue;
+            float max = int.MinValue;
             for (int i = 0; i < backendBoard.empty_squares.Count; i++)
             {
                 int move = backendBoard.empty_squares[0];
@@ -52,13 +52,13 @@ namespace MonteCarlo
             return max;
         }
 
-        static int mini(int depth, BackendBoard backendBoard, int hasmove)
+        static float mini(int depth, BackendBoard backendBoard, int hasmove)
         {
             if (depth == 0 || backendBoard.empty_squares.Count == 0 || backendBoard.IsFinished())
             {
                 return Evaluate(backendBoard);
             }
-            int min = int.MaxValue;
+            float min = float.MaxValue;
             for (int i = 0; i < backendBoard.empty_squares.Count; i++)
             {
                 int move = backendBoard.empty_squares[0];
@@ -72,7 +72,7 @@ namespace MonteCarlo
             }
             return min;
         }
-        public static int Evaluate(BackendBoard backendBoard)
+        public static float Evaluate(BackendBoard backendBoard)
         {
             var winner = backendBoard.GameResult();
             if (winner.finished)
