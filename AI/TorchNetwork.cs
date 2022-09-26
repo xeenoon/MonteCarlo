@@ -22,8 +22,6 @@ namespace MonteCarlo
     }
     public class TorchNetwork : nn.Module
     {
-        private int boardsize;
-        private int actionsize;
         private Linear fc1;
         private Linear fc2;
 
@@ -34,8 +32,6 @@ namespace MonteCarlo
 
         public TorchNetwork(string name, int boardsize, int actionsize) : base(name)
         {
-            this.boardsize = boardsize;
-            this.actionsize = actionsize;
             this.fc1 = nn.Linear(boardsize, 16);
             this.fc2 = nn.Linear(16, 16);
 
@@ -47,6 +43,8 @@ namespace MonteCarlo
             this.device = torch.device("cpu");
 
             this.name = name;
+
+            RegisterComponents();
         }
 
         public struct TensorTuple
