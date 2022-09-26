@@ -23,7 +23,7 @@ namespace MonteCarlo
             this.model = model;
             this.game = game;
             this.args = args;
-            mcts = new MCTS(game, model, args);
+            mcts = new MCTS(args);
         }
         public class ProbabilityDistribution
         {
@@ -47,7 +47,7 @@ namespace MonteCarlo
             while (true)
             {
                 reverse = state.Flipp(current_player);  //Flip the board to the opponents perspective
-                mcts = new MCTS(game, model, args);
+                mcts = new MCTS(args);
                 var root = mcts.Run(model, reverse, 1);
                 float[] action_probs = Enumerable.Repeat((float)0, reverse.width).ToArray();
                 foreach (var child in root.children)
@@ -88,19 +88,16 @@ namespace MonteCarlo
 
                 trainexamples.Shuffle();
                 Train(trainexamples);
-                var filename = "latest.pth";
-                Save(".", filename);
+          //      var filename = "latest.pth";
+          //      Save(".", filename);
             }
         }
 
         private void Train(List<ProbabilityDistribution> examples)
         {
-            var optimizer = optim.Adam(model.parameters());//, 0.0005);
+            var optimizer = optim.Adam(model.parameters(), 0.0005);
             List<float> pi_losses = new List<float>();
             List<float> v_losses = new List<float>();
-
-            Tensor LastPiExamples = null;
-            Tensor LastProbExamples = null;
 
             for (int epoch = 0; epoch < args["epochs"]; ++epoch)
             {
@@ -141,10 +138,11 @@ namespace MonteCarlo
                     totalloss.backward();
                     optimizer.step();
 
-                    batchidx += 1;
 
-                    LastPiExamples = data.tensor1.detach();
-                    LastProbExamples = probabilities[0];
+                    batchidx++;
+
+                  //  LastPiExamples = data.tensor1.detach();
+                  //  LastProbExamples = probabilities[0];
                 }
             }
 
@@ -154,8 +152,9 @@ namespace MonteCarlo
             Console.WriteLine(String.Format("Policy Loss: {0}", pl));
             Console.WriteLine(String.Format("Value Loss: {0}", vl));
             Console.WriteLine("Examples:");
-            Console.WriteLine(LastPiExamples[0].ToList().ToArray().Write());
-            Console.WriteLine(LastProbExamples.ToList().ToArray().Write());
+            //Console.WriteLine(LastPiExamples[0].ToList().ToArray().Write());
+            //Console.WriteLine(LastProbExamples.ToList().ToArray().Write());
+            Console.WriteLine(model.Predict(new BackendBoard(1, 4, 2).board).probabilities.Write());
         }
 
         private void Save(string folder, string filename)

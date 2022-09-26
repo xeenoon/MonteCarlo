@@ -70,7 +70,7 @@ namespace MonteCarlo
 
             Tensor tanh_v = tanh(value_logit);
             
-            using Softmax softmax = nn.Softmax(0);
+            Softmax softmax = nn.Softmax(x.Dimensions-1);
 
             Tensor tensor_v = softmax.forward(action_logits);
             return new TensorTuple(tensor_v, tanh_v);

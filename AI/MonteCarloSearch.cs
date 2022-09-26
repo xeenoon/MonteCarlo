@@ -104,7 +104,7 @@ namespace MonteCarlo
             public void Expand(BackendBoard board_state, int toplay, NDarray<float> action_probs)
             {
                 this.toplay = toplay;
-                this.board_state = board_state;
+                this.board_state = board_state.Flipp(1); //Copy it
                 for (int i = 0; i < action_probs.len; ++i)
                 {
                     var prob = action_probs.item<double>(i); //Just a foreach
@@ -118,13 +118,9 @@ namespace MonteCarlo
 
         public class MCTS
         {
-            public BackendBoard board;
-            public TorchNetwork connect2board;
             public Dictionary<string, int> args; //Potentially add extra arguments at some points
-            public MCTS(BackendBoard backendBoard, TorchNetwork torchNetwork, Dictionary<string, int> args)
+            public MCTS(Dictionary<string, int> args)
             {
-                this.board = backendBoard;
-                this.connect2board = torchNetwork;
                 this.args = args;
             }
             public Node Run(TorchNetwork model, BackendBoard board_state, int toplay)
@@ -154,7 +150,7 @@ namespace MonteCarlo
                         searchpath.Add(node);
                     }
                     var parent = searchpath[searchpath.Count-2]; // second last item
-                    board_state = parent.board_state; //This is actually a reference... could cause errors
+                    board_state = parent.board_state.Flipp(1); //This is actually a reference... could cause errors
                     //We are at a leaf node and need to expand
                     //Always play from out perspective (us:1, enemy:-1)
                     var nextboardstate = board_state.NextState(1, action); //1 is us
@@ -174,7 +170,7 @@ namespace MonteCarlo
                         validmoves = nextboardstate.ValidMoves();
                         action_probs = action_probs.Multiply(validmoves);
                         action_probs = action_probs.Divide(action_probs.Sum());
-                        root.Expand(nextboardstate, toplay, np.array<float>(action_probs));
+                        node.Expand(nextboardstate, parent.toplay * -1, np.array<float>(action_probs));
                     }
                     BackPropogate(searchpath, value,parent.toplay *-1);
                 }
