@@ -1,5 +1,4 @@
-﻿using Numpy;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -57,16 +56,6 @@ namespace AI
                 randomdictionary.Add(random, item);
             }
             return randomdictionary.OrderBy(t => t.Key).Select(t => t.Value).ToList();
-        }
-        public static List<T> ToList<T>(this NDarray<T> array)
-        {
-            List<T> list = new List<T>();
-            for (int i = 0; i < array.len; ++i)
-            {
-                list.Add(array.item<T>(i)); //Just a foreach
-            }
-            return list;
-        
         }
         public static List<float> ToList(this torch.Tensor array)
         {

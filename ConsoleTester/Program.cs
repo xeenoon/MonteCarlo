@@ -1,6 +1,5 @@
 ﻿using AI;
 using Game;
-using Numpy;
 
 namespace ConsoleTester
 {
@@ -13,15 +12,15 @@ namespace ConsoleTester
             int[] data1 = new int[7] { 0, 1, 2, 3, 4, 5, 6 };
             double[] data2 = new double[7] { 1, 1, 1, 1, 1, 1, 4 };
 
-            var actions = np.array(data1);
-            var visitcounts = np.array(data2);
+//            var actions = np.array(data1);
+//            var visitcounts = np.array(data2);
             // var action =  np.random.choice(actions,null, true, visitcounts);
             //Console.WriteLine(Argmax(data1, data2))
             //Console.WriteLine(action);
 
-            NDarray<int> sample_ids = np.random.randint(5, size: new int[1] { 15 });
+//            NDarray<int> sample_ids = np.random.randint(5, size: new int[1] { 15 });
 
-            Console.WriteLine(sample_ids.ToList().ToArray().Write());
+     //       Console.WriteLine(sample_ids.ToList().ToArray().Write());
             Console.WriteLine(RandomSet(0,5,15).ToArray().Write());
             Console.WriteLine("Finished testing");
             Console.WriteLine("");
