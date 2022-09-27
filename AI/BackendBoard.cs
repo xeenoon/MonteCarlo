@@ -155,13 +155,10 @@ namespace Game
 
         public int GetReward(int player)
         {
-            if (IsWin(player))
+            var result = GameResult();
+            if (result.finished)
             {
-                return 1; //We won
-            }
-            else if (IsWin(-player))
-            {
-                return -1; //We lost :(
+                return (int)(result.player_won) == player ? 1 : -1;
             }
             return 0; //We drew, :\
         }
