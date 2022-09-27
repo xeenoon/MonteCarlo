@@ -105,5 +105,37 @@ namespace AI
             result += "]";
             return result;
         }
+        public static int Argmax(this int[] data1, int[] data2)
+        {
+            return data1[Array.IndexOf(data2, data2.Max())];
+        }
+        static Random random = new Random();
+        public static T RanChoice<T>(this T[] array)
+        {
+            return array[random.Next(0,array.Length)];
+        }
+
+        public static T GetRandom<T>(this T[] pool, double[] probabilities)
+        {
+            // get universal probability 
+            double u = probabilities.Sum();
+
+            // pick a random number between 0 and u
+            double r = random.NextDouble() * u;
+
+            double sum = 0;
+            for (int i = 0; i < pool.Length; i++)
+            {
+                var n = pool[i];
+                double p = probabilities[i];
+                // loop until the random number is less than our cumulative probability
+                if (r <= (sum = sum + p))
+                {
+                    return n;
+                }
+            }
+            // should never get here
+            throw new Exception("Pool cannot have 0 items");
+        }
     }
 }

@@ -59,24 +59,22 @@ namespace AI
             public int SelectAction(int temperature)
             {
 
-                NDarray<int> actions = np.array(children.Keys.ToArray());
-                NDarray<int> visitcounts = np.array(children.Select(c=>c.Value.visitCount).ToArray()); //.values()
+                var actions = children.Keys.ToArray();
+                var visitcounts = children.Select(c=>c.Value.visitCount).ToArray(); //.values()
                 int action = 0;
 
                 if (temperature == 0)
                 {
-                    action = actions[np.argmax(visitcounts)].item<int>(0);                
+                    action = actions.Argmax(visitcounts);                
                 }
                 else if (float.IsInfinity(temperature))
                 {
-                    action = np.random.choice(actions).item<int>(0);
+                    action = actions.RanChoice();
                 }
                 else
                 {
                     var visit_count_distribution = children.Select(c=>Math.Pow(c.Value.visitCount, (1/temperature))).ToArray();
-                    visit_count_distribution = visit_count_distribution.Select(n=>n/ visit_count_distribution.Sum(i => i)).ToArray();
-                    NDarray<double> vcd = np.array(visit_count_distribution);
-                    action = np.random.choice(actions, null, true, vcd).item<int>(0);
+                    action = actions.GetRandom(visit_count_distribution);
                 }
                 return action;
             }
