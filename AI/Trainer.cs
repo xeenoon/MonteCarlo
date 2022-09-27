@@ -114,7 +114,7 @@ namespace AI
                 while (batchidx < (int)(examples.Count / args["batch_size"]))
                 {
                     NDarray<int> sample_ids = np.random.randint(examples.Count,size: new int[1] { args["batch_size"] });
-
+                    
                     List<ProbabilityDistribution> list = (from i in sample_ids.ToList() select examples[i]).ToList().ToList();
 
                     List<float> allboards = new List<float>();

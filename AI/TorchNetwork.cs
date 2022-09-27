@@ -32,12 +32,12 @@ namespace AI
 
         public TorchNetwork(string name, int boardsize, int actionsize) : base(name)
         {
-            this.fc1 = nn.Linear(boardsize, 16);
-            this.fc2 = nn.Linear(16, 16);
+            this.fc1 = nn.Linear(boardsize, 168);
+            this.fc2 = nn.Linear(168, 168);
 
 
-            this.actionHead = nn.Linear(16, actionsize);
-            this.valueHead = nn.Linear(16, 1);
+            this.actionHead = nn.Linear(168, actionsize);
+            this.valueHead = nn.Linear(168, 1);
 
             this.to(torch.device("cpu"));
             this.device = torch.device("cpu");
