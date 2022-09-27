@@ -27,9 +27,10 @@ namespace MonteCarlo
 
             int bestmove = 0;
             float max = float.MinValue;
-            for (int i = 0; i < game.empty_squares.Count; i++)
+            var moves = game.AvailableMoves();
+            for (int i = 0; i < moves.Count; i++)
             {
-                int move = game.empty_squares[0];
+                int move = moves[0];
                 game.Move(move, s);
                 var score = mini(2, game, -s);
                 game.UndoMove(move);
@@ -95,14 +96,15 @@ namespace MonteCarlo
 
         static float maxi(int depth, BackendBoard backendBoard, int hasmove)
         {
-            if (depth == 0 || backendBoard.empty_squares.Count == 0 || backendBoard.IsFinished())
+            if (depth == 0 || backendBoard.IsFinished())
             {
                 return Evaluate(backendBoard);
             }
             float max = int.MinValue;
-            for (int i = 0; i < backendBoard.empty_squares.Count; i++)
+            var moves = backendBoard.AvailableMoves();
+            for (int i = 0; i < moves.Count; i++)
             {
-                int move = backendBoard.empty_squares[0];
+                int move = moves[0];
                 backendBoard.Move(move, hasmove);
                 var score = mini(depth - 1, backendBoard, -hasmove);
                 backendBoard. UndoMove(move);
@@ -116,14 +118,15 @@ namespace MonteCarlo
 
         static float mini(int depth, BackendBoard backendBoard, int hasmove)
         {
-            if (depth == 0 || backendBoard.empty_squares.Count == 0 || backendBoard.IsFinished())
+            if (depth == 0 || backendBoard.IsFinished())
             {
                 return Evaluate(backendBoard);
             }
             float min = float.MaxValue;
-            for (int i = 0; i < backendBoard.empty_squares.Count; i++)
+            var moves = backendBoard.AvailableMoves();
+            for (int i = 0; i < moves.Count; i++)
             {
-                int move = backendBoard.empty_squares[0];
+                int move = moves[0];
                 backendBoard.Move(move, hasmove);
                 var score = maxi(depth - 1, backendBoard, -hasmove);
                 backendBoard.UndoMove(move);

@@ -159,7 +159,7 @@ namespace AI
 
                     //Get value of the board state from the perspective of the other player
                     value = nextboardstate.GetReward(1);
-                    if (value == 0 && nextboardstate.empty_squares.Count >= 1)
+                    if (!nextboardstate.IsFinished())
                     {
                         //Game has not ended
                         //ZOOM IN AND ENHANCE

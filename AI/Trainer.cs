@@ -65,7 +65,7 @@ namespace AI
                 state = state.NextState(current_player, action); //Simulate the move
                 current_player *= -1;
                 var reward = state.GetReward(current_player);
-                if (state.empty_squares.Count == 0 || reward != 0) //Game over
+                if (state.IsFinished()) //Game over
                 {
                     List<ProbabilityDistribution> toreturn = new List<ProbabilityDistribution>();
                     foreach (var example in train_examples)

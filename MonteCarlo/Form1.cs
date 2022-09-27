@@ -45,7 +45,7 @@ namespace MonteCarlo
         {
             if (connectBoard == null)
             {
-                connectBoard = new ConnectBoard(6,7,50,new Point(10,20), 2);
+                connectBoard = new ConnectBoard(6,7,50,new Point(10,20), 4);
                 connectBoard.Draw(e.Graphics);
                 hasturn = firstplayer;
             }
@@ -103,7 +103,7 @@ namespace MonteCarlo
 
         private void PlayTurn(ref int value)
         {
-            if (connectBoard != null && (connectBoard.backendBoard.GetReward(1) != 0 || connectBoard.backendBoard.empty_squares.Count == 0))
+            if (connectBoard != null && connectBoard.backendBoard.IsFinished())
             {
                 return;
             }

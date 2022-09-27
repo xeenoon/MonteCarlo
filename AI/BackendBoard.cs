@@ -27,7 +27,6 @@ namespace Game
 
         public float[] board;
 
-        public List<int> empty_squares = new List<int>();
         public int[] ValidMoves()
         {
             int[] validMoves = new int[board.Length];
@@ -51,16 +50,14 @@ namespace Game
             this.width = width;
             board = new float[height * width];
             this.win_requirement = win_requirement;
-            empty_squares = Enumerable.Range(0, height * width).ToList();
         }
 
-        private BackendBoard(int height, int width, int win_requirement, float[] board, List<int> emptySquares)
+        private BackendBoard(int height, int width, int win_requirement, float[] board)
         {
             this.height = height;
             this.width = width;
             this.board = board;
             this.win_requirement = win_requirement;
-            this.empty_squares = emptySquares;
         }
         public int Move(int col, int hasmove)
         {
@@ -98,10 +95,10 @@ namespace Game
             {
                 if (board[col + row * width] == 0) //Empty square?
                 {
-                    return true;
+                    return false;
                 }
             }
-            return false;
+            return true;
         }
 
         public bool IsFinished()
@@ -144,7 +141,7 @@ namespace Game
                     }
                 }
             }
-            if (empty_squares.Count == 0)
+            if (AvailableMoves().Count == 0)
             {
                 return new GameResult(true, 0);
             }
@@ -166,6 +163,10 @@ namespace Game
 
         private int FindDuplicates(int startposition, int endposition, float side, int direction, int duplicatesfound = 0)
         {
+            if (startposition <= -1) //Negative
+            {
+                return duplicatesfound;
+            }
             if (board[startposition] == side)
             {
                 ++duplicatesfound;
@@ -180,18 +181,18 @@ namespace Game
 
         public BackendBoard Flipped()
         {
-            return new BackendBoard(height, width, win_requirement, board.Select(n=>n*-1).ToArray(), empty_squares.Copy());
+            return new BackendBoard(height, width, win_requirement, board.Select(n=>n*-1).ToArray());
         }
         public BackendBoard Flipp(int player)
         {
-            return new BackendBoard(height, width, win_requirement, board.Select(n => n * player).ToArray(), empty_squares.Copy());
+            return new BackendBoard(height, width, win_requirement, board.Select(n => n * player).ToArray());
         }
 
         public BackendBoard NextState(int player, int action)
         {
             float[] b = board.Select(n => n).ToArray(); //Copy board
 
-            BackendBoard backendBoard = new BackendBoard(height, width, 2, b, empty_squares.Copy());
+            BackendBoard backendBoard = new BackendBoard(height, width, 2, b);
             backendBoard.Move(action, player);
             return backendBoard;
         }

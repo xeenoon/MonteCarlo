@@ -42,6 +42,7 @@ namespace MonteCarlo
         {
             location.X -= this.offset.X;
             location.Y -= this.offset.Y; //Account for the offset
+            location.Y = ((height) * size) -location.Y;
 
             location.X /= size;
             location.Y /= size;
@@ -64,7 +65,7 @@ namespace MonteCarlo
             for (int i = 0; i < width * height; ++i)
             {
                 int x = (i % width) * size + offset.X;
-                int y = (i / width) * size + offset.Y;
+                int y = ((height-1)*size) - ((i / width) * size) + offset.Y;
                 Rectangle bounds = new Rectangle(x, y, size, size);
                 squares[i] = new Square(i, bounds, new Pen(Color.White), new Pen(Color.Blue), this);
                 squares[i].Draw(g);
@@ -116,8 +117,8 @@ namespace MonteCarlo
         {
             if (side == 0) //Currently empty
             {
-                side = hasturn;
-                connectBoard.backendBoard.Move(location,side);
+                var pos = connectBoard.backendBoard.Move(location%connectBoard.width,hasturn);
+                connectBoard.squares[pos].side = hasturn;
             }
         }
     }
