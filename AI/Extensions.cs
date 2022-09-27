@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TorchSharp;
 using Game;
+using System.Collections.Concurrent;
 
 namespace AI
 {
@@ -134,6 +135,13 @@ namespace AI
                 result.Add(random.Next(min, max));
             }
             return result;
+        }
+        public static void AddRange<T>(this ConcurrentBag<T> bag, IEnumerable<T> toAdd)
+        {
+            foreach (var element in toAdd)
+            {
+                bag.Add(element);
+            }
         }
     }
 }

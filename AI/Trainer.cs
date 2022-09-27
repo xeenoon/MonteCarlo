@@ -7,6 +7,8 @@ using TorchSharp;
 using static AI.MonteCarloSearch;
 using static TorchSharp.torch;
 using Game;
+using System.Diagnostics;
+using System.Collections.Concurrent;
 
 namespace AI
 {
@@ -76,22 +78,33 @@ namespace AI
                 }
             }
         }
+        public double paralellticks = 0;
+        public double normalticks = 0;
         public void Learn()
         {
             for (int i = 0; i < args["numIters"]; ++i) //Iterate through the iterations requested
             {
-                var trainexamples = new List<ProbabilityDistribution>();
-                for (int e = 0; e < args["numEps"]; ++e) //Iterate through number of episodes
+                Stopwatch stopwatch = new Stopwatch();
+                stopwatch.Start();
+                var ccbag = new ConcurrentBag<ProbabilityDistribution>();
+                Parallel.For(0, args["numEps"], e =>
                 {
                     var examples = ExcecuteEpisode(); //Simulate a game
-                    trainexamples.AddRange(examples); //Add the game positions
-                }
-
+                    ccbag.AddRange(examples); //Add the game positions
+                });
+                stopwatch.Stop();
+                var trainexamples = ccbag.ToList();
                 trainexamples.Shuffle();
+                paralellticks += stopwatch.ElapsedTicks;
+
+                stopwatch.Restart();
                 Log("");
                 Log(string.Format("{0} out of {1} iterations train data: ", i+1, args["numIters"]));
                 Train(trainexamples);
                 Log("------------------------------------------");
+                stopwatch.Stop();
+                normalticks += stopwatch.ElapsedTicks;
+                Log(String.Format("Paralell: {0}, Normal: {1}", paralellticks, normalticks));
           //      var filename = "latest.pth";
           //      Save(".", filename);
             }
