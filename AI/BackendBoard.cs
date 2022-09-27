@@ -198,7 +198,7 @@ namespace Game
         {
             float[] b = board.Select(n => n).ToArray(); //Copy board
 
-            BackendBoard backendBoard = new BackendBoard(height, width, 2, b);
+            BackendBoard backendBoard = new BackendBoard(height, width, win_requirement, b);
             backendBoard.Move(action, player);
             return backendBoard;
         }

@@ -16,8 +16,8 @@ namespace ConsoleTester
                 {"numItersForTrainExamplesHistory",20},
                 {"epochs",2},
             };
-            var game = new BackendBoard(1, 4, 2);
-            var model = new TorchNetwork("bob", 4, 4);
+            var game = new BackendBoard(6, 7, 4);
+            var model = new TorchNetwork("bob", 42, 7);
 
             var trainer = new Trainer(game, model, arguments, Write);
             trainer.Learn();

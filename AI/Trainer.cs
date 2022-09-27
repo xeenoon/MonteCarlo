@@ -45,7 +45,7 @@ namespace AI
         {
             List<ProbabilityDistribution> train_examples = new List<ProbabilityDistribution>();
             int current_player = 1;
-            var state = new BackendBoard(1, 4, 2); //Create an empty board
+            var state = new BackendBoard(6, 7, 4); //Create an empty board
             var reverse = game;
             while (true)
             {
@@ -160,7 +160,7 @@ namespace AI
             Log("Start pos result:");
             //Console.WriteLine(LastPiExamples[0].ToList().ToArray().Write());
             //Console.WriteLine(LastProbExamples.ToList().ToArray().Write());
-            Log(model.Predict(new BackendBoard(1, 4, 2).board).probabilities.Write());
+            //Log(model.Predict(new BackendBoard(6, 7, 4).board).probabilities.Write());
         }
 
         private void Save(string folder, string filename)
