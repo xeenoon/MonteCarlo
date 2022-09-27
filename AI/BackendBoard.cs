@@ -62,15 +62,46 @@ namespace Game
             this.win_requirement = win_requirement;
             this.empty_squares = emptySquares;
         }
-        public void Move(int position, int hasmove)
+        public int Move(int col, int hasmove)
         {
-            board[position] = hasmove;
-            empty_squares.Remove(position);
+            for (int row = 0; row < height; ++row)
+            {
+                if (board[col + row*width] == 0) //Empty square?
+                {
+                    board[col + row * width] = hasmove;
+                    return col + row * width;
+                }
+            }
+            return -1;
         }
         public void UndoMove(int position)
         {
             board[position] = 0;
-            empty_squares.Add(position);
+        }
+
+        public List<int> AvailableMoves()
+        {
+            List<int> result = new List<int>();
+            for (int i = 0; i <width; ++i)
+            {
+                if (!ColumnFull(i))
+                {
+                    result.Add(i);
+                }
+            }
+            return result;
+        }
+
+        public bool ColumnFull(int col)
+        {
+            for (int row = 0; row < height; ++row)
+            {
+                if (board[col + row * width] == 0) //Empty square?
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         public bool IsFinished()
