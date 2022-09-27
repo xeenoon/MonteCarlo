@@ -45,7 +45,7 @@ namespace MonteCarlo
         {
             if (connectBoard == null)
             {
-                connectBoard = new ConnectBoard(1,4,50,new Point(10,20), 2);
+                connectBoard = new ConnectBoard(6,7,50,new Point(10,20), 2);
                 connectBoard.Draw(e.Graphics);
                 hasturn = firstplayer;
             }

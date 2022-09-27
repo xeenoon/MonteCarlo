@@ -79,14 +79,14 @@ namespace Game
             {
                 for (int row = 0; row < height; ++row)
                 {
-                    var side = board[col + row * 8];
+                    var side = board[col + row * width];
                     if (side == 0) //Empty square
                     {
                         continue;
                     }
                     if (col >= win_requirement - 1) //Look for duplicates towards the left
                     {
-                        int inarow = FindDuplicates(col + row * 8, row * 8, side, -1); //Look towards the right
+                        int inarow = FindDuplicates(col + row * width, row * width, side, -1); //Look towards the right
                         if (inarow >= win_requirement)
                         {
                             return true; //Win
@@ -106,14 +106,14 @@ namespace Game
             {
                 for (int row = 0; row < height; ++row)
                 {
-                    var side = board[col + row * 8];
+                    var side = board[col + row * width];
                     if (side != player) //Empty square or opponent
                     {
                         continue;
                     }
                     if (col >= win_requirement - 1) //Look for duplicates towards the left
                     {
-                        int inarow = FindDuplicates(col + row * 8, row * 8, side, -1); //Look towards the right
+                        int inarow = FindDuplicates(col + row * width, row * width, side, -1); //Look towards the right
                         if (inarow >= win_requirement)
                         {
                             return true; //Win
