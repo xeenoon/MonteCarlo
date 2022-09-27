@@ -11,7 +11,7 @@ namespace MonteCarlo
 {
     public class MiniMax
     {
-        static TorchNetwork model = new TorchNetwork("bob", 4, 4);
+        public static TorchNetwork model = new TorchNetwork("bob", 4, 4);
 
         public static int BestMove(BackendBoard backendBoard, int s)
         {

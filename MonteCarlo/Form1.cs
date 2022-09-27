@@ -202,5 +202,31 @@ namespace MonteCarlo
         {
 
         }
+
+        private void SaveModel(object sender, EventArgs e)
+        {
+            saveFileDialog1 = new SaveFileDialog();
+            saveFileDialog1.Filter = "ML files (*.TML)|*.TML|All files (*.*)|*.*";
+            saveFileDialog1.FilterIndex = 1;
+            saveFileDialog1.RestoreDirectory = true;
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                var path = Path.GetFullPath(saveFileDialog1.FileName);
+                MiniMax.model.save(path);
+            }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            openFileDialog1 = new OpenFileDialog();
+            openFileDialog1.Filter = "ML files (*.TML)|*.TML";
+            openFileDialog1.FilterIndex = 1;
+            openFileDialog1.RestoreDirectory = true;
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                var path = Path.GetFullPath(openFileDialog1.FileName);
+                MiniMax.model.load(path);
+            }
+        }
     }
 }
