@@ -101,14 +101,15 @@ namespace AI
                 Log("");
                 Log(string.Format("{0} out of {1} iterations train data: ", i+1, args["numIters"]));
                 Train(trainexamples);
-                Log("------------------------------------------");
                 stopwatch.Stop();
-                normalticks += stopwatch.ElapsedTicks;
-                Log(String.Format("Paralell: {0}, Normal: {1}", paralellticks, normalticks));
+                normalticks += stopwatch.ElapsedTicks; Log(String.Format("Paralell ticks: {0}, Main thread ticks: {1}", paralellticks, normalticks));
+                Log("------------------------------------------");
+
           //      var filename = "latest.pth";
           //      Save(".", filename);
             }
             mcts = null;
+            GC.Collect();
         }
 
         private void Train(List<ProbabilityDistribution> examples)
@@ -156,7 +157,6 @@ namespace AI
                     totalloss.backward();
                     optimizer.step();
 
-
                     batchidx++;
 
                   //  LastPiExamples = data.tensor1.detach();
@@ -172,6 +172,7 @@ namespace AI
             //Console.WriteLine(LastPiExamples[0].ToList().ToArray().Write());
             //Console.WriteLine(LastProbExamples.ToList().ToArray().Write());
             //Log(model.Predict(new BackendBoard(6, 7, 4).board).probabilities.Write());
+            optimizer.Dispose();
         }
 
         private void Save(string folder, string filename)
