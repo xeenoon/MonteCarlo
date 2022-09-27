@@ -75,53 +75,12 @@ namespace Game
 
         public bool IsFinished()
         {
-            for (int col = 0; col < width; ++col)
-            {
-                for (int row = 0; row < height; ++row)
-                {
-                    var side = board[col + row * width];
-                    if (side == 0) //Empty square
-                    {
-                        continue;
-                    }
-                    if (col >= win_requirement - 1) //Look for duplicates towards the left
-                    {
-                        int inarow = FindDuplicates(col + row * width, row * width, side, -1); //Look towards the right
-                        if (inarow >= win_requirement)
-                        {
-                            return true; //Win
-                        }
-                    }
-                }
-            }
-            if (empty_squares.Count == 0)
-            {
-                return true; //Draw
-            }
-            return false; //Unfinished game
+            return GameResult().finished;
         }
         public bool IsWin(int player)
         {
-            for (int col = 0; col < width; ++col)
-            {
-                for (int row = 0; row < height; ++row)
-                {
-                    var side = board[col + row * width];
-                    if (side != player) //Empty square or opponent
-                    {
-                        continue;
-                    }
-                    if (col >= win_requirement - 1) //Look for duplicates towards the left
-                    {
-                        int inarow = FindDuplicates(col + row * width, row * width, side, -1); //Look towards the right
-                        if (inarow >= win_requirement)
-                        {
-                            return true; //Win
-                        }
-                    }
-                }
-            }
-            return false; //Unfinished game OR draw
+            GameResult gameResult = GameResult();
+            return gameResult.player_won == player;
         }
         public GameResult GameResult()
         {
@@ -129,14 +88,24 @@ namespace Game
             {
                 for (int row = 0; row < height; ++row)
                 {
-                    var side = board[col + row * 8];
+                    var side = board[col + row * width];
                     if (side == 0) //Empty square
                     {
                         continue;
                     }
                     if (col >= win_requirement - 1) //Look for duplicates towards the left
                     {
-                        int inarow = FindDuplicates(col + row * 8, row * 8, side, -1); //Look towards the right
+                        int inarow = FindDuplicates(col + row * width, row * width, side, -1); //Look towards the right
+                        if (inarow >= win_requirement)
+                        {
+                            return new GameResult(true, side); //Win
+                        }
+                        inarow = FindDuplicates(col + row * width, (col + row * width) - col * (width + 1), side, -(width + 1));
+                        if (inarow >= win_requirement)
+                        {
+                            return new GameResult(true, side); //Win
+                        }
+                        inarow = FindDuplicates(col + row * width, (col + row * width) - col * (width - 1), side, -(width - 1));
                         if (inarow >= win_requirement)
                         {
                             return new GameResult(true, side); //Win
