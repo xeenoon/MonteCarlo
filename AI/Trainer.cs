@@ -1,6 +1,4 @@
-﻿using Numpy;
-using Numpy.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -113,9 +111,9 @@ namespace AI
 
                 while (batchidx < (int)(examples.Count / args["batch_size"]))
                 {
-                    NDarray<int> sample_ids = np.random.randint(examples.Count,size: new int[1] { args["batch_size"] });
+                    var sample_ids = Extensions.RandomSet(0,examples.Count, args["batch_size"]);
                     
-                    List<ProbabilityDistribution> list = (from i in sample_ids.ToList() select examples[i]).ToList().ToList();
+                    List<ProbabilityDistribution> list = (from i in sample_ids select examples[i]).ToList().ToList();
 
                     List<float> allboards = new List<float>();
                     for (int i = 0; i < list.Count; i++)
@@ -153,8 +151,8 @@ namespace AI
                 }
             }
 
-            var pl = np.mean(np.array(pi_losses.ToArray()));
-            var vl = np.mean(np.array(v_losses.ToArray()));
+            var pl = pi_losses.Average();
+            var vl = v_losses.Average();
             Log(String.Format("Policy Loss: {0}", pl));
             Log(String.Format("Value Loss: {0}", vl));
             Log("Start pos result:");

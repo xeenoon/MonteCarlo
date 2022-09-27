@@ -9,31 +9,20 @@ namespace ConsoleTester
         static int iters = 1000000;
         static void Main(string[] args)
         {
-            Console.WriteLine("Testing choice...");
+            Console.WriteLine("Testing Randint...");
             int[] data1 = new int[7] { 0, 1, 2, 3, 4, 5, 6 };
-            double[] data2 = new double[7] {1,1,1,1,1,1,4};
+            double[] data2 = new double[7] { 1, 1, 1, 1, 1, 1, 4 };
 
             var actions = np.array(data1);
             var visitcounts = np.array(data2);
-           // var action =  np.random.choice(actions,null, true, visitcounts);
+            // var action =  np.random.choice(actions,null, true, visitcounts);
             //Console.WriteLine(Argmax(data1, data2))
             //Console.WriteLine(action);
 
-            double[] estprob = new double[7];
+            NDarray<int> sample_ids = np.random.randint(5, size: new int[1] { 15 });
 
-            for (int i = 0; i < iters; ++i)
-            {
-                var rand = GetRandom(data1,data2);
-                estprob[rand]++;
-            }
-            string result = "";
-            for (int i = 0; i < 7; ++i)
-            {
-                estprob[i] = estprob[i] / iters;
-                result += estprob[i];
-                result += ",";
-            }
-            Console.WriteLine(result);
+            Console.WriteLine(sample_ids.ToList().ToArray().Write());
+            Console.WriteLine(RandomSet(0,5,15).ToArray().Write());
             Console.WriteLine("Finished testing");
             Console.WriteLine("");
             return;
@@ -57,6 +46,27 @@ namespace ConsoleTester
 
             Console.ReadLine();
         }
+
+        private static string EstimateProbabilities(int[] data1, double[] data2)
+        {
+            double[] estprob = new double[7];
+
+            for (int i = 0; i < iters; ++i)
+            {
+                var rand = GetRandom(data1, data2);
+                estprob[rand]++;
+            }
+            string result = "";
+            for (int i = 0; i < 7; ++i)
+            {
+                estprob[i] = estprob[i] / iters;
+                result += estprob[i];
+                result += ",";
+            }
+
+            return result;
+        }
+
         public static bool Write(string value)
         {
             Console.WriteLine(value);
@@ -66,7 +76,7 @@ namespace ConsoleTester
         {
             return data1[Array.IndexOf(data2,data2.Max())];
         }
-        static Random rand = new Random();
+        static Random random = new Random();
 
         public static int GetRandom(int[] pool, double[] probabilities)
         {
@@ -74,7 +84,7 @@ namespace ConsoleTester
             double u = probabilities.Sum();
 
             // pick a random number between 0 and u
-            double r = rand.NextDouble() * u;
+            double r = random.NextDouble() * u;
 
             double sum = 0;
             for (int i = 0; i < pool.Length; i++)
@@ -89,6 +99,15 @@ namespace ConsoleTester
             }
             // should never get here
             return 0;
+        }
+        public static List<int> RandomSet(int min, int max, int length)
+        {
+            List<int> result = new List<int>();
+            for (int i = 0; i < length; ++i)
+            {
+                result.Add(random.Next(min,max));
+            }
+            return result;
         }
     }
 }

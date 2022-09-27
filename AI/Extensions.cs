@@ -137,5 +137,14 @@ namespace AI
             // should never get here
             throw new Exception("Pool cannot have 0 items");
         }
+        public static List<int> RandomSet(int min, int max, int length)
+        {
+            List<int> result = new List<int>();
+            for (int i = 0; i < length; ++i)
+            {
+                result.Add(random.Next(min, max));
+            }
+            return result;
+        }
     }
 }
