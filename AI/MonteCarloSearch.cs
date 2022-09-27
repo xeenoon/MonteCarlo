@@ -132,7 +132,7 @@ namespace AI
                 var m_action = model.Predict(board_state.board);
                 var action_probs = m_action.probabilities;
                 var value = m_action.v;
-                var validmoves = board_state.ValidMoves();
+                var validmoves = board_state.ValidMoveMask();
                 action_probs = action_probs.Multiply(validmoves);
                 action_probs = action_probs.Divide(action_probs.Sum());
                 root.Expand(board_state, toplay, np.array<float>(action_probs));
@@ -168,7 +168,7 @@ namespace AI
                         m_action = model.Predict(nextboardstate.board);
                         action_probs = m_action.probabilities;
                         value = m_action.v;
-                        validmoves = nextboardstate.ValidMoves();
+                        validmoves = nextboardstate.ValidMoveMask();
                         action_probs = action_probs.Multiply(validmoves);
                         action_probs = action_probs.Divide(action_probs.Sum());
                         node.Expand(nextboardstate, parent.toplay * -1, np.array<float>(action_probs));

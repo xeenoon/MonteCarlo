@@ -62,7 +62,7 @@ namespace MonteCarlo
             {
                 s = 1; //Reset s to 1
             }
-            var probabilities = model.Predict(game.board).probabilities.Multiply(game.ValidMoves());
+            var probabilities = model.Predict(game.board).probabilities.Multiply(game.ValidMoveMask());
             double max = double.MinValue;
             int bestmove = 0;
             for (int i = 0; i < probabilities.Length; ++i)

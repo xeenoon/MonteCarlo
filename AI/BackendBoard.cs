@@ -27,22 +27,19 @@ namespace Game
 
         public float[] board;
 
-        public int[] ValidMoves()
+        public int[] ValidMoveMask()
         {
-            int[] validMoves = new int[board.Length];
-            for (int i = 0; i < board.Length; i++)
+
+            int[] result = new int[width];
+            for (int i = 0; i < width; ++i)
             {
-                float token = board[i];
-                if (token == 0)
+                if (!ColumnFull(i))
                 {
-                    validMoves[i] = 1; //Available space
-                }
-                else
-                {
-                    validMoves[i] = 0;
+                    result[i] = 1;
                 }
             }
-            return validMoves;
+            return result;
+
         }
         public BackendBoard(int height, int width, int win_requirement)
         {
