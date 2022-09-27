@@ -183,13 +183,7 @@ namespace MonteCarlo
 
         private void button1_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Training beggining for 5 iterations");
-         //   var t = new Thread(() =>
-        //    {
-                MiniMax.TrainML(5, Log);
-                MessageBox.Show("Training finished");
-         //   });
-         //   t.Start();
+            panel2.Visible = true;
         }
         string[] lines = new string[100];
         public bool Log(string input)
@@ -227,6 +221,34 @@ namespace MonteCarlo
                 var path = Path.GetFullPath(openFileDialog1.FileName);
                 MiniMax.model.load(path);
             }
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            var iterations = -1;
+            if (int.TryParse(IterationBox.Text,out iterations))
+            {
+                if (iterations <= 0)
+                {
+                    MessageBox.Show("Iterations cannot be negative or zero");
+                }
+                else
+                {
+                    panel2.Visible = false;
+                    MessageBox.Show(String.Format("Training beggining for {0} iterations", iterations));
+                    MiniMax.TrainML(iterations, Log);
+                    MessageBox.Show("Training finished");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Iterations must be a number");
+            }
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            panel2.Visible = false;
         }
     }
 }

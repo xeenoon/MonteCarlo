@@ -40,7 +40,13 @@
             this.button3 = new System.Windows.Forms.Button();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.label4 = new System.Windows.Forms.Label();
+            this.IterationBox = new System.Windows.Forms.TextBox();
+            this.button4 = new System.Windows.Forms.Button();
+            this.button5 = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
+            this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // button1
@@ -110,7 +116,7 @@
             this.panel1.Controls.Add(this.label2);
             this.panel1.Location = new System.Drawing.Point(411, 129);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(366, 267);
+            this.panel1.Size = new System.Drawing.Size(386, 267);
             this.panel1.TabIndex = 6;
             // 
             // textBox1
@@ -123,7 +129,7 @@
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
             this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBox1.Size = new System.Drawing.Size(358, 228);
+            this.textBox1.Size = new System.Drawing.Size(372, 228);
             this.textBox1.TabIndex = 1;
             this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
@@ -163,11 +169,62 @@
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
+            // panel2
+            // 
+            this.panel2.Controls.Add(this.button5);
+            this.panel2.Controls.Add(this.button4);
+            this.panel2.Controls.Add(this.IterationBox);
+            this.panel2.Controls.Add(this.label4);
+            this.panel2.Location = new System.Drawing.Point(285, 165);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(200, 100);
+            this.panel2.TabIndex = 9;
+            this.panel2.Visible = false;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(32, 21);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(140, 14);
+            this.label4.TabIndex = 0;
+            this.label4.Text = "Training iterations";
+            // 
+            // IterationBox
+            // 
+            this.IterationBox.Location = new System.Drawing.Point(50, 39);
+            this.IterationBox.Name = "IterationBox";
+            this.IterationBox.Size = new System.Drawing.Size(100, 22);
+            this.IterationBox.TabIndex = 1;
+            this.IterationBox.Text = "5";
+            this.IterationBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(22, 67);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(75, 23);
+            this.button4.TabIndex = 2;
+            this.button4.Text = "Go";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
+            // 
+            // button5
+            // 
+            this.button5.Location = new System.Drawing.Point(103, 67);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(75, 23);
+            this.button5.TabIndex = 3;
+            this.button5.Text = "Cancel";
+            this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 420);
+            this.Controls.Add(this.panel2);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.panel1);
@@ -185,6 +242,8 @@
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.Form1_Paint);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            this.panel2.ResumeLayout(false);
+            this.panel2.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -204,5 +263,10 @@
         private Button button3;
         private SaveFileDialog saveFileDialog1;
         private OpenFileDialog openFileDialog1;
+        private Panel panel2;
+        private TextBox IterationBox;
+        private Label label4;
+        private Button button4;
+        private Button button5;
     }
 }

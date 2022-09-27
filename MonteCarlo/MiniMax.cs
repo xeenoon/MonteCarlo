@@ -31,7 +31,7 @@ namespace MonteCarlo
             {
                 int move = game.empty_squares[0];
                 game.Move(move, s);
-                var score = maxi(2, game, -s);
+                var score = mini(2, game, -s);
                 game.UndoMove(move);
                 if (score > max)
                 {
@@ -61,7 +61,7 @@ namespace MonteCarlo
             {
                 s = 1; //Reset s to 1
             }
-            var probabilities = model.Predict(backendBoard.board).probabilities.Multiply(backendBoard.ValidMoves());
+            var probabilities = model.Predict(game.board).probabilities.Multiply(game.ValidMoves());
             double max = double.MinValue;
             int bestmove = 0;
             for (int i = 0; i < probabilities.Length; ++i)
