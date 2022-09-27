@@ -186,10 +186,21 @@ namespace MonteCarlo
             MessageBox.Show("Training beggining for 5 iterations");
          //   var t = new Thread(() =>
         //    {
-                MiniMax.TrainML(5);
+                MiniMax.TrainML(5, Log);
                 MessageBox.Show("Training finished");
          //   });
          //   t.Start();
+        }
+        string[] lines = new string[100];
+        public bool Log(string input)
+        {
+            textBox1.AppendText(input + "\r\n");
+            return false;
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

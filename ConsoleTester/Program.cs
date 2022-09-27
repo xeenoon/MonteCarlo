@@ -19,12 +19,17 @@ namespace ConsoleTester
             var game = new BackendBoard(1, 4, 2);
             var model = new TorchNetwork("bob", 4, 4);
 
-            var trainer = new Trainer(game, model, arguments);
+            var trainer = new Trainer(game, model, arguments, Write);
             trainer.Learn();
             Console.WriteLine(model.Predict(game.board).probabilities.Write());
             Console.WriteLine("Finished training");
 
             Console.ReadLine();
+        }
+        public static bool Write(string value)
+        {
+            Console.WriteLine(value);
+            return false;
         }
     }
 }

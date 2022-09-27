@@ -75,7 +75,7 @@ namespace MonteCarlo
             return bestmove;
         }
 
-        public static void TrainML(int trainingdepth)
+        public static void TrainML(int trainingdepth, Func<string, bool> logger)
         {
             Dictionary<string, int> arguments = new Dictionary<string, int>()
             {
@@ -88,7 +88,7 @@ namespace MonteCarlo
             };
             var game = new BackendBoard(1, 4, 2);
             
-            var trainer = new Trainer(game, model, arguments);
+            var trainer = new Trainer(game, model, arguments, logger);
             trainer.Learn();
         }
 

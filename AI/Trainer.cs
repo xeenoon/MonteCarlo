@@ -18,13 +18,15 @@ namespace AI
         public BackendBoard game;
         public Dictionary<string, int> args;
         public MCTS mcts;
+        public Func<string, bool> Log;
 
-        public Trainer(BackendBoard game, TorchNetwork model, Dictionary<string, int> args)
+        public Trainer(BackendBoard game, TorchNetwork model, Dictionary<string, int> args, Func<string, bool> log)
         {
             this.model = model;
             this.game = game;
             this.args = args;
             mcts = new MCTS(args);
+            Log = log;
         }
         public class ProbabilityDistribution
         {
@@ -88,7 +90,10 @@ namespace AI
                 }
 
                 trainexamples.Shuffle();
+                Log("");
+                Log(string.Format("{0} out of {1} iterations train data: ", i+1, args["numIters"]));
                 Train(trainexamples);
+                Log("------------------------------------------");
           //      var filename = "latest.pth";
           //      Save(".", filename);
             }
@@ -148,15 +153,14 @@ namespace AI
                 }
             }
 
-            Console.WriteLine();
             var pl = np.mean(np.array(pi_losses.ToArray()));
             var vl = np.mean(np.array(v_losses.ToArray()));
-            Console.WriteLine(String.Format("Policy Loss: {0}", pl));
-            Console.WriteLine(String.Format("Value Loss: {0}", vl));
-            Console.WriteLine("Examples:");
+            Log(String.Format("Policy Loss: {0}", pl));
+            Log(String.Format("Value Loss: {0}", vl));
+            Log("Start pos result:");
             //Console.WriteLine(LastPiExamples[0].ToList().ToArray().Write());
             //Console.WriteLine(LastProbExamples.ToList().ToArray().Write());
-            Console.WriteLine(model.Predict(new BackendBoard(1, 4, 2).board).probabilities.Write());
+            Log(model.Predict(new BackendBoard(1, 4, 2).board).probabilities.Write());
         }
 
         private void Save(string folder, string filename)
