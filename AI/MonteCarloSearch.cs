@@ -102,13 +102,13 @@ namespace AI
                 }
                 return new KeyValuePair<int, Node>(best_action, best_child);
             }
-            public void Expand(BackendBoard board_state, int toplay, NDarray<float> action_probs)
+            public void Expand(BackendBoard board_state, int toplay, float[] action_probs)
             {
                 this.toplay = toplay;
                 this.board_state = board_state.Flipp(1); //Copy it
-                for (int i = 0; i < action_probs.len; ++i)
+                for (int i = 0; i < action_probs.Length; ++i)
                 {
-                    var prob = action_probs.item<double>(i); //Just a foreach
+                    var prob = action_probs[i]; //Just a foreach
                     if (prob != 0)
                     {
                         children[i] = new Node(prob, toplay*-1); //This is a weird way of accomplishing this
@@ -135,7 +135,7 @@ namespace AI
                 var validmoves = board_state.ValidMoveMask();
                 action_probs = action_probs.Multiply(validmoves);
                 action_probs = action_probs.Divide(action_probs.Sum());
-                root.Expand(board_state, toplay, np.array<float>(action_probs));
+                root.Expand(board_state, toplay, action_probs);
 
                 //Run simulations
                 for (int i = 0; i < args["num_simulations"]; ++i)
@@ -171,7 +171,7 @@ namespace AI
                         validmoves = nextboardstate.ValidMoveMask();
                         action_probs = action_probs.Multiply(validmoves);
                         action_probs = action_probs.Divide(action_probs.Sum());
-                        node.Expand(nextboardstate, parent.toplay * -1, np.array<float>(action_probs));
+                        node.Expand(nextboardstate, parent.toplay * -1, action_probs);
                     }
                     BackPropogate(searchpath, value,parent.toplay *-1);
                 }
