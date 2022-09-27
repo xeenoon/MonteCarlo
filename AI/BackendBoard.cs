@@ -171,10 +171,11 @@ namespace Game
 
         private int FindDuplicates(int startposition, int endposition, float side, int direction, int duplicatesfound = 0)
         {
-            if (startposition <= -1) //Negative
+            if (startposition <= -1 || startposition >= board.Length) //Out of range
             {
                 return duplicatesfound;
             }
+
             if (board[startposition] == side)
             {
                 ++duplicatesfound;
@@ -184,7 +185,7 @@ namespace Game
                 return duplicatesfound;
             }
 
-            return FindDuplicates(startposition+direction, endposition, side, direction, duplicatesfound);
+            return FindDuplicates(startposition + direction, endposition, side, direction, duplicatesfound);
         }
 
         public BackendBoard Flipped()

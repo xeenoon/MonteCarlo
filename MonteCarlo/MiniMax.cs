@@ -30,10 +30,10 @@ namespace MonteCarlo
             var moves = game.AvailableMoves();
             for (int i = 0; i < moves.Count; i++)
             {
-                int move = moves[0];
-                game.Move(move, s);
-                var score = mini(2, game, -s);
-                game.UndoMove(move);
+                int move = moves[i];
+                var pos = game.Move(move, s);
+                var score = mini(6, game, -s);
+                game.UndoMove(pos);
                 if (score > max)
                 {
                     max = score;
@@ -104,10 +104,10 @@ namespace MonteCarlo
             var moves = backendBoard.AvailableMoves();
             for (int i = 0; i < moves.Count; i++)
             {
-                int move = moves[0];
-                backendBoard.Move(move, hasmove);
+                int move = moves[i];
+                var pos = backendBoard.Move(move, hasmove);
                 var score = mini(depth - 1, backendBoard, -hasmove);
-                backendBoard. UndoMove(move);
+                backendBoard. UndoMove(pos);
                 if (score > max)
                 {
                     max = score;
@@ -126,10 +126,10 @@ namespace MonteCarlo
             var moves = backendBoard.AvailableMoves();
             for (int i = 0; i < moves.Count; i++)
             {
-                int move = moves[0];
-                backendBoard.Move(move, hasmove);
+                int move = moves[i];
+                var pos = backendBoard.Move(move, hasmove);
                 var score = maxi(depth - 1, backendBoard, -hasmove);
-                backendBoard.UndoMove(move);
+                backendBoard.UndoMove(pos);
                 if (score < min)
                 {
                     min = score;

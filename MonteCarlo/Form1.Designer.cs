@@ -41,10 +41,10 @@
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.label4 = new System.Windows.Forms.Label();
-            this.IterationBox = new System.Windows.Forms.TextBox();
-            this.button4 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
+            this.button4 = new System.Windows.Forms.Button();
+            this.IterationBox = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
@@ -73,6 +73,7 @@
             // RedPlayerBox
             // 
             this.RedPlayerBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.RedPlayerBox.Font = new System.Drawing.Font("Microsoft YaHei", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.RedPlayerBox.FormattingEnabled = true;
             this.RedPlayerBox.Items.AddRange(new object[] {
             "Human",
@@ -81,7 +82,7 @@
             "Min-Max"});
             this.RedPlayerBox.Location = new System.Drawing.Point(563, 15);
             this.RedPlayerBox.Name = "RedPlayerBox";
-            this.RedPlayerBox.Size = new System.Drawing.Size(121, 22);
+            this.RedPlayerBox.Size = new System.Drawing.Size(121, 25);
             this.RedPlayerBox.TabIndex = 3;
             this.RedPlayerBox.SelectedIndexChanged += new System.EventHandler(this.PlayerChanged);
             // 
@@ -98,6 +99,7 @@
             // GreenPlayerBox
             // 
             this.GreenPlayerBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.GreenPlayerBox.Font = new System.Drawing.Font("Microsoft YaHei", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.GreenPlayerBox.FormattingEnabled = true;
             this.GreenPlayerBox.Items.AddRange(new object[] {
             "Human",
@@ -106,7 +108,7 @@
             "Min-Max"});
             this.GreenPlayerBox.Location = new System.Drawing.Point(563, 56);
             this.GreenPlayerBox.Name = "GreenPlayerBox";
-            this.GreenPlayerBox.Size = new System.Drawing.Size(121, 22);
+            this.GreenPlayerBox.Size = new System.Drawing.Size(121, 25);
             this.GreenPlayerBox.TabIndex = 5;
             this.GreenPlayerBox.SelectedIndexChanged += new System.EventHandler(this.PlayerChanged);
             // 
@@ -181,23 +183,15 @@
             this.panel2.TabIndex = 9;
             this.panel2.Visible = false;
             // 
-            // label4
+            // button5
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(32, 21);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(140, 14);
-            this.label4.TabIndex = 0;
-            this.label4.Text = "Training iterations";
-            // 
-            // IterationBox
-            // 
-            this.IterationBox.Location = new System.Drawing.Point(50, 39);
-            this.IterationBox.Name = "IterationBox";
-            this.IterationBox.Size = new System.Drawing.Size(100, 22);
-            this.IterationBox.TabIndex = 1;
-            this.IterationBox.Text = "5";
-            this.IterationBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.button5.Location = new System.Drawing.Point(103, 67);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(75, 23);
+            this.button5.TabIndex = 3;
+            this.button5.Text = "Cancel";
+            this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
             // button4
             // 
@@ -209,15 +203,23 @@
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
-            // button5
+            // IterationBox
             // 
-            this.button5.Location = new System.Drawing.Point(103, 67);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(75, 23);
-            this.button5.TabIndex = 3;
-            this.button5.Text = "Cancel";
-            this.button5.UseVisualStyleBackColor = true;
-            this.button5.Click += new System.EventHandler(this.button5_Click);
+            this.IterationBox.Location = new System.Drawing.Point(50, 39);
+            this.IterationBox.Name = "IterationBox";
+            this.IterationBox.Size = new System.Drawing.Size(100, 22);
+            this.IterationBox.TabIndex = 1;
+            this.IterationBox.Text = "5";
+            this.IterationBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(32, 21);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(140, 14);
+            this.label4.TabIndex = 0;
+            this.label4.Text = "Training iterations";
             // 
             // Form1
             // 

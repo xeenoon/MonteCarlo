@@ -148,8 +148,8 @@ namespace MonteCarlo
             }
             else
             {
-                connectBoard.backendBoard.Move(position, value);
-                connectBoard.squares[position].side = value;
+                var realpos = connectBoard.backendBoard.Move(position, value);
+                connectBoard.squares[realpos].side = value;
                 value = -value;
                 Invalidate();
             }
