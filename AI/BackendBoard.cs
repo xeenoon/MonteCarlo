@@ -133,7 +133,15 @@ namespace Game
                         {
                             return new GameResult(true, side); //Win
                         }
-                        inarow = FindDuplicates(col + row * width, (col + row * width) - col * (width - 1), side, -(width - 1));
+                        inarow = FindDuplicates(col + row * width, (col + row * width) + col * (width - 1), side, (width - 1));
+                        if (inarow >= win_requirement)
+                        {
+                            return new GameResult(true, side); //Win
+                        }
+                    }
+                    if (row >= win_requirement - 1) //Look for duplicates downwards
+                    {
+                        int inarow = FindDuplicates(col + row * width, col, side, -(width));
                         if (inarow >= win_requirement)
                         {
                             return new GameResult(true, side); //Win
