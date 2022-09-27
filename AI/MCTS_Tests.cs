@@ -4,11 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static MonteCarlo.MonteCarloSearch;
-using static MonteCarlo.TorchNetwork;
+using static AI.MonteCarloSearch;
+using static AI.TorchNetwork;
 using static TorchSharp.torch;
 
-namespace MonteCarlo
+namespace AI
 {
     internal class MCTS_Tests
     {
@@ -33,12 +33,7 @@ namespace MonteCarlo
 
         public static bool Test1()
         {
-            var game = new BackendBoard(1, 4, 2);
-            var args = new Dictionary<string, int>() { { "num_simulations", 50 } };
 
-            var model = new MockModel(new double[4] { 0.26, 0.24, 0.24, 0.26 }, 0.0001);
-            var mcts = new MCTS(game, model, args);
-            var root = mcts.Run(model, game, 1);
 
             //Best move is play at indexes 1 & 2 even though their probabilities are lower
             var best_outer_move = Math.Max(root.children[0].visitCount, root.children[0].visitCount);

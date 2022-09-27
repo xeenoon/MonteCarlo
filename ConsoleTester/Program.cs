@@ -1,4 +1,5 @@
-﻿using MonteCarlo;
+﻿using AI;
+using Game;
 
 namespace ConsoleTester
 {

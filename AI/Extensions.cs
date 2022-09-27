@@ -5,8 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TorchSharp;
+using Game;
 
-namespace MonteCarlo
+namespace AI
 {
     public static class Extensions
     {

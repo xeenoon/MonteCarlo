@@ -6,10 +6,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TorchSharp;
-using static MonteCarlo.MonteCarloSearch;
+using static AI.MonteCarloSearch;
 using static TorchSharp.torch;
+using Game;
 
-namespace MonteCarlo
+namespace AI
 {
     public class Trainer
     {
@@ -91,6 +92,7 @@ namespace MonteCarlo
           //      var filename = "latest.pth";
           //      Save(".", filename);
             }
+            mcts = null;
         }
 
         private void Train(List<ProbabilityDistribution> examples)

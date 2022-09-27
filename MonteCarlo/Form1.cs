@@ -1,8 +1,16 @@
 using System.Timers;
 using TorchSharp;
+using Game;
 
 namespace MonteCarlo
 {
+    enum PlayerType
+    {
+        Human,
+        ML,
+        MCTS,
+        MinMax
+    }
     public partial class Form1 : Form
     {
         ConnectBoard connectBoard;
@@ -11,37 +19,41 @@ namespace MonteCarlo
         {
             InitializeComponent();
 
-
+            GreenPlayerBox.SelectedIndex = 0;
+            RedPlayerBox.SelectedIndex = 0;
         }
         System.Timers.Timer checkmateTimer = new System.Timers.Timer();
         int won = 0;
         bool runagain = true;
 
-        bool humanfirst = true;
+        int firstplayer = 1;
+        PlayerType red
+        {
+            get
+            {
+                return (PlayerType)RedPlayerBox.SelectedIndex;
+            }
+        }
+        PlayerType green
+        {
+            get
+            {
+                return (PlayerType)GreenPlayerBox.SelectedIndex;
+            }
+        }
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
             if (connectBoard == null)
             {
                 connectBoard = new ConnectBoard(1,4,50,new Point(10,20), 2);
                 connectBoard.Draw(e.Graphics);
-                if (!humanfirst)
-                {
-                    var otherturn = -hasturn;
-                    int position = MiniMax.BestMove(connectBoard.backendBoard, otherturn);
-                    if (position == -1)
-                    {
-                        return;
-                    }
-                    connectBoard.backendBoard.Move(position, otherturn);
-                    connectBoard.squares[position].side = otherturn;
-                    connectBoard.Paint(e.Graphics);
-                }
+                hasturn = firstplayer;
             }
             else
             {
                 connectBoard.Paint(e.Graphics);
             }
-            if (connectBoard.backendBoard.IsFinished() && runagain)
+            if (connectBoard != null && connectBoard.backendBoard.IsFinished() && runagain)
             {
                 won = connectBoard.backendBoard.GetReward(1);
                 runagain = false;
@@ -62,16 +74,87 @@ namespace MonteCarlo
             }
             else
             {
-                MessageBox.Show(String.Format("{0} won", won == -1 ? "Opponent" : "You"), "Victory");
+                MessageBox.Show(String.Format("{0} won", hasturn == 1 ? "Green" : "Red"), "Victory");
             }
             messageshowing = false;
             connectBoard = null;
             runagain = true;
             won = 0;
-            humanfirst = !humanfirst;
+            firstplayer = -firstplayer;
             Invalidate();
         }
-        int hasturn = 1;
+        int HASTURN = 1;
+        int hasturn
+        {
+            get
+            {
+                return HASTURN;
+            }
+            set
+            {
+                HASTURN = value;
+                PlayTurn(ref HASTURN);
+                if (HASTURN != value)
+                {
+                    hasturn = HASTURN; //Run AI thing again
+                }
+            }
+        }
+
+        private void PlayTurn(ref int value)
+        {
+            if (connectBoard != null && (connectBoard.backendBoard.GetReward(1) != 0 || connectBoard.backendBoard.empty_squares.Count == 0))
+            {
+                return;
+            }
+            int position = -1;
+            if (value == 1) //Red
+            {
+                switch (red)
+                {
+                    case PlayerType.Human:
+                        break;
+                    case PlayerType.ML:
+                        position = MiniMax.ML_PROB_Move(connectBoard.backendBoard, value);
+                        break;
+                    case PlayerType.MinMax:
+                        position = MiniMax.BestMove(connectBoard.backendBoard, value);
+                        break;
+                    case PlayerType.MCTS:
+                        position = MiniMax.Best_ML_Move(connectBoard.backendBoard, value);
+                        break;
+                }
+            }
+            else
+            {
+                switch (green)
+                {
+                    case PlayerType.Human:
+                        break;
+                    case PlayerType.ML:
+                        position = MiniMax.ML_PROB_Move(connectBoard.backendBoard, value);
+                        break;
+                    case PlayerType.MinMax:
+                        position = MiniMax.BestMove(connectBoard.backendBoard, value);
+                        break;
+                    case PlayerType.MCTS:
+                        position = MiniMax.Best_ML_Move(connectBoard.backendBoard, value);
+                        break;
+                }
+            }
+            if (position == -1) //No moves?
+            {
+                return;
+            }
+            else
+            {
+                connectBoard.backendBoard.Move(position, value);
+                connectBoard.squares[position].side = value;
+                value = -value;
+                Invalidate();
+            }
+        }
+
         private void Form1_Click(object sender, EventArgs e)
         {
             Square square = connectBoard.SquareAt(((MouseEventArgs)e).Location);
@@ -79,8 +162,34 @@ namespace MonteCarlo
             {
                 return;
             }
+            if ((hasturn == 1 && red != PlayerType.Human) || (hasturn == 0 && green != PlayerType.Human)) //Are we trying to play an AI's turn
+            {
+                return;
+            }
             square.Click(hasturn);
+            hasturn = -hasturn;
             Invalidate();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void PlayerChanged(object sender, EventArgs e)
+        {
+            hasturn = HASTURN;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Training beggining for 5 iterations");
+         //   var t = new Thread(() =>
+        //    {
+                MiniMax.TrainML(5);
+                MessageBox.Show("Training finished");
+         //   });
+         //   t.Start();
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Game;
 
 namespace MonteCarlo
 {
@@ -117,14 +118,6 @@ namespace MonteCarlo
             {
                 side = hasturn;
                 connectBoard.backendBoard.Move(location,side);
-                var otherturn = -hasturn;
-                int position = MiniMax.BestMove(connectBoard.backendBoard, otherturn);
-                if (position == -1)
-                {
-                    return;
-                }
-                connectBoard.backendBoard.Move(position, otherturn);
-                connectBoard.squares[position].side = otherturn;
             }
         }
     }

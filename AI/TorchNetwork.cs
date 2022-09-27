@@ -7,7 +7,7 @@ using TorchSharp;
 using TorchSharp.Modules;
 using static TorchSharp.torch;
 
-namespace MonteCarlo
+namespace AI
 {
     public class DoubleTuple
     {
