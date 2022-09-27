@@ -62,6 +62,11 @@ namespace MonteCarlo
                 checkmateTimer.Start();
                 Invalidate();
             }
+            if (waitfordraw)
+            {
+                waitfordraw = false;
+                hasturn = HASTURN; //Run AI thing again.
+            }
         }
         bool messageshowing = false;
         public void TimerElapsed(object sender, ElapsedEventArgs e)
@@ -84,6 +89,7 @@ namespace MonteCarlo
             Invalidate();
         }
         int HASTURN = 1;
+        bool waitfordraw = false;
         int hasturn
         {
             get
@@ -96,7 +102,8 @@ namespace MonteCarlo
                 PlayTurn(ref HASTURN);
                 if (HASTURN != value)
                 {
-                    hasturn = HASTURN; //Run AI thing again
+                    waitfordraw = true;
+                    Invalidate();
                 }
             }
         }

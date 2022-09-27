@@ -27,7 +27,7 @@ namespace MonteCarlo
 
             int bestmove = 0;
             float max = float.MinValue;
-            var moves = game.AvailableMoves();
+            var moves = game.AvailableMoves().Shuffle();
             for (int i = 0; i < moves.Count; i++)
             {
                 int move = moves[i];
