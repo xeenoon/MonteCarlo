@@ -97,7 +97,7 @@ namespace AI
                 Train(trainexamples);
                 stopwatch.Stop();
                 Log(String.Format("Iteration time: {0} seconds", stopwatch.ElapsedMilliseconds/1000));
-                Log("Estimated time: " + ((args["numIters"]-i) * (stopwatch.ElapsedMilliseconds / 1000)));
+                Log("Estimated time left: " + ((args["numIters"]-i) * (stopwatch.ElapsedMilliseconds / 1000)) + " seconds");
                 Log("------------------------------------------");
             }
             mcts = null;
