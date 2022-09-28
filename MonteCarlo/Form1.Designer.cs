@@ -43,26 +43,29 @@
             this.IterationBox = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.button6 = new System.Windows.Forms.Button();
-            this.panel3 = new System.Windows.Forms.Panel();
-            this.button12 = new System.Windows.Forms.Button();
-            this.button11 = new System.Windows.Forms.Button();
-            this.button10 = new System.Windows.Forms.Button();
-            this.label9 = new System.Windows.Forms.Label();
+            this.AI_Settings_Panel = new System.Windows.Forms.Panel();
+            this.NameLabel = new System.Windows.Forms.Label();
+            this.Name_textbox = new System.Windows.Forms.TextBox();
+            this.CloseButton = new System.Windows.Forms.Button();
+            this.TrainButton = new System.Windows.Forms.Button();
+            this.CopyButton = new System.Windows.Forms.Button();
+            this.ApplyButton = new System.Windows.Forms.Button();
+            this.Depth_Label = new System.Windows.Forms.Label();
             this.Depth_textbox = new System.Windows.Forms.TextBox();
-            this.label8 = new System.Windows.Forms.Label();
-            this.LearnRate_textbox = new System.Windows.Forms.TextBox();
+            this.LR_Label = new System.Windows.Forms.Label();
+            this.LR_textbox = new System.Windows.Forms.TextBox();
             this.AutosaveCheckbox = new System.Windows.Forms.CheckBox();
-            this.label7 = new System.Windows.Forms.Label();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.button9 = new System.Windows.Forms.Button();
-            this.button8 = new System.Windows.Forms.Button();
-            this.button7 = new System.Windows.Forms.Button();
+            this.SaveLabel = new System.Windows.Forms.Label();
+            this.SavePath_textbox = new System.Windows.Forms.TextBox();
+            this.DeleteButton = new System.Windows.Forms.Button();
+            this.ImportButton = new System.Windows.Forms.Button();
+            this.NewButton = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
-            this.listBox1 = new System.Windows.Forms.ListBox();
+            this.AI_List = new System.Windows.Forms.ListBox();
             this.label5 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
-            this.panel3.SuspendLayout();
+            this.AI_Settings_Panel.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -213,148 +216,198 @@
             this.button6.TabIndex = 10;
             this.button6.Text = "AI settings";
             this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
             // 
-            // panel3
+            // AI_Settings_Panel
             // 
-            this.panel3.Controls.Add(this.button12);
-            this.panel3.Controls.Add(this.button11);
-            this.panel3.Controls.Add(this.button10);
-            this.panel3.Controls.Add(this.label9);
-            this.panel3.Controls.Add(this.Depth_textbox);
-            this.panel3.Controls.Add(this.label8);
-            this.panel3.Controls.Add(this.LearnRate_textbox);
-            this.panel3.Controls.Add(this.AutosaveCheckbox);
-            this.panel3.Controls.Add(this.label7);
-            this.panel3.Controls.Add(this.textBox2);
-            this.panel3.Controls.Add(this.button9);
-            this.panel3.Controls.Add(this.button8);
-            this.panel3.Controls.Add(this.button7);
-            this.panel3.Controls.Add(this.label6);
-            this.panel3.Controls.Add(this.listBox1);
-            this.panel3.Controls.Add(this.label5);
-            this.panel3.Location = new System.Drawing.Point(49, 12);
-            this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(219, 362);
-            this.panel3.TabIndex = 11;
-            this.panel3.Visible = false;
+            this.AI_Settings_Panel.Controls.Add(this.NameLabel);
+            this.AI_Settings_Panel.Controls.Add(this.Name_textbox);
+            this.AI_Settings_Panel.Controls.Add(this.CloseButton);
+            this.AI_Settings_Panel.Controls.Add(this.TrainButton);
+            this.AI_Settings_Panel.Controls.Add(this.CopyButton);
+            this.AI_Settings_Panel.Controls.Add(this.ApplyButton);
+            this.AI_Settings_Panel.Controls.Add(this.Depth_Label);
+            this.AI_Settings_Panel.Controls.Add(this.Depth_textbox);
+            this.AI_Settings_Panel.Controls.Add(this.LR_Label);
+            this.AI_Settings_Panel.Controls.Add(this.LR_textbox);
+            this.AI_Settings_Panel.Controls.Add(this.AutosaveCheckbox);
+            this.AI_Settings_Panel.Controls.Add(this.SaveLabel);
+            this.AI_Settings_Panel.Controls.Add(this.SavePath_textbox);
+            this.AI_Settings_Panel.Controls.Add(this.DeleteButton);
+            this.AI_Settings_Panel.Controls.Add(this.ImportButton);
+            this.AI_Settings_Panel.Controls.Add(this.NewButton);
+            this.AI_Settings_Panel.Controls.Add(this.label6);
+            this.AI_Settings_Panel.Controls.Add(this.AI_List);
+            this.AI_Settings_Panel.Controls.Add(this.label5);
+            this.AI_Settings_Panel.Location = new System.Drawing.Point(49, 12);
+            this.AI_Settings_Panel.Name = "AI_Settings_Panel";
+            this.AI_Settings_Panel.Size = new System.Drawing.Size(219, 405);
+            this.AI_Settings_Panel.TabIndex = 11;
+            this.AI_Settings_Panel.Visible = false;
             // 
-            // button12
+            // NameLabel
             // 
-            this.button12.Font = new System.Drawing.Font("Microsoft YaHei", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.button12.Location = new System.Drawing.Point(138, 329);
-            this.button12.Name = "button12";
-            this.button12.Size = new System.Drawing.Size(64, 24);
-            this.button12.TabIndex = 24;
-            this.button12.Text = "Train";
-            this.button12.UseVisualStyleBackColor = true;
+            this.NameLabel.AutoSize = true;
+            this.NameLabel.Enabled = false;
+            this.NameLabel.Location = new System.Drawing.Point(7, 255);
+            this.NameLabel.Name = "NameLabel";
+            this.NameLabel.Size = new System.Drawing.Size(35, 14);
+            this.NameLabel.TabIndex = 27;
+            this.NameLabel.Text = "Name";
             // 
-            // button11
+            // Name_textbox
             // 
-            this.button11.Font = new System.Drawing.Font("Microsoft YaHei", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.button11.Location = new System.Drawing.Point(147, 168);
-            this.button11.Name = "button11";
-            this.button11.Size = new System.Drawing.Size(64, 24);
-            this.button11.TabIndex = 23;
-            this.button11.Text = "Copy";
-            this.button11.UseVisualStyleBackColor = true;
+            this.Name_textbox.Enabled = false;
+            this.Name_textbox.Location = new System.Drawing.Point(7, 272);
+            this.Name_textbox.Name = "Name_textbox";
+            this.Name_textbox.Size = new System.Drawing.Size(204, 22);
+            this.Name_textbox.TabIndex = 26;
             // 
-            // button10
+            // CloseButton
             // 
-            this.button10.Font = new System.Drawing.Font("Microsoft YaHei", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.button10.Location = new System.Drawing.Point(7, 329);
-            this.button10.Name = "button10";
-            this.button10.Size = new System.Drawing.Size(64, 24);
-            this.button10.TabIndex = 22;
-            this.button10.Text = "Export";
-            this.button10.UseVisualStyleBackColor = true;
+            this.CloseButton.Font = new System.Drawing.Font("Microsoft YaHei", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.CloseButton.Location = new System.Drawing.Point(147, 375);
+            this.CloseButton.Name = "CloseButton";
+            this.CloseButton.Size = new System.Drawing.Size(64, 24);
+            this.CloseButton.TabIndex = 25;
+            this.CloseButton.Text = "Close";
+            this.CloseButton.UseVisualStyleBackColor = true;
+            this.CloseButton.Click += new System.EventHandler(this.CloseButton_Click);
             // 
-            // label9
+            // TrainButton
             // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(138, 284);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(42, 14);
-            this.label9.TabIndex = 21;
-            this.label9.Text = "Depth";
+            this.TrainButton.Enabled = false;
+            this.TrainButton.Font = new System.Drawing.Font("Microsoft YaHei", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.TrainButton.Location = new System.Drawing.Point(77, 375);
+            this.TrainButton.Name = "TrainButton";
+            this.TrainButton.Size = new System.Drawing.Size(64, 24);
+            this.TrainButton.TabIndex = 24;
+            this.TrainButton.Text = "Train";
+            this.TrainButton.UseVisualStyleBackColor = true;
+            this.TrainButton.Click += new System.EventHandler(this.TrainButton_Click);
+            // 
+            // CopyButton
+            // 
+            this.CopyButton.Enabled = false;
+            this.CopyButton.Font = new System.Drawing.Font("Microsoft YaHei", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.CopyButton.Location = new System.Drawing.Point(147, 168);
+            this.CopyButton.Name = "CopyButton";
+            this.CopyButton.Size = new System.Drawing.Size(64, 24);
+            this.CopyButton.TabIndex = 23;
+            this.CopyButton.Text = "Copy";
+            this.CopyButton.UseVisualStyleBackColor = true;
+            // 
+            // ApplyButton
+            // 
+            this.ApplyButton.Enabled = false;
+            this.ApplyButton.Font = new System.Drawing.Font("Microsoft YaHei", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.ApplyButton.Location = new System.Drawing.Point(7, 375);
+            this.ApplyButton.Name = "ApplyButton";
+            this.ApplyButton.Size = new System.Drawing.Size(64, 24);
+            this.ApplyButton.TabIndex = 22;
+            this.ApplyButton.Text = "Apply";
+            this.ApplyButton.UseVisualStyleBackColor = true;
+            this.ApplyButton.Click += new System.EventHandler(this.ApplyButton_Click);
+            // 
+            // Depth_Label
+            // 
+            this.Depth_Label.AutoSize = true;
+            this.Depth_Label.Enabled = false;
+            this.Depth_Label.Location = new System.Drawing.Point(138, 330);
+            this.Depth_Label.Name = "Depth_Label";
+            this.Depth_Label.Size = new System.Drawing.Size(42, 14);
+            this.Depth_Label.TabIndex = 21;
+            this.Depth_Label.Text = "Depth";
             // 
             // Depth_textbox
             // 
-            this.Depth_textbox.Location = new System.Drawing.Point(138, 301);
+            this.Depth_textbox.Enabled = false;
+            this.Depth_textbox.Location = new System.Drawing.Point(138, 347);
             this.Depth_textbox.Name = "Depth_textbox";
             this.Depth_textbox.Size = new System.Drawing.Size(73, 22);
             this.Depth_textbox.TabIndex = 20;
             // 
-            // label8
+            // LR_Label
             // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(7, 284);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(98, 14);
-            this.label8.TabIndex = 19;
-            this.label8.Text = "Learning rate";
+            this.LR_Label.AutoSize = true;
+            this.LR_Label.Enabled = false;
+            this.LR_Label.Location = new System.Drawing.Point(7, 330);
+            this.LR_Label.Name = "LR_Label";
+            this.LR_Label.Size = new System.Drawing.Size(98, 14);
+            this.LR_Label.TabIndex = 19;
+            this.LR_Label.Text = "Learning rate";
             // 
-            // LearnRate_textbox
+            // LR_textbox
             // 
-            this.LearnRate_textbox.Location = new System.Drawing.Point(7, 301);
-            this.LearnRate_textbox.Name = "LearnRate_textbox";
-            this.LearnRate_textbox.Size = new System.Drawing.Size(100, 22);
-            this.LearnRate_textbox.TabIndex = 18;
+            this.LR_textbox.Enabled = false;
+            this.LR_textbox.Location = new System.Drawing.Point(7, 347);
+            this.LR_textbox.Name = "LR_textbox";
+            this.LR_textbox.Size = new System.Drawing.Size(100, 22);
+            this.LR_textbox.TabIndex = 18;
             // 
             // AutosaveCheckbox
             // 
             this.AutosaveCheckbox.AutoSize = true;
-            this.AutosaveCheckbox.Location = new System.Drawing.Point(7, 254);
+            this.AutosaveCheckbox.Enabled = false;
+            this.AutosaveCheckbox.Location = new System.Drawing.Point(8, 304);
             this.AutosaveCheckbox.Name = "AutosaveCheckbox";
             this.AutosaveCheckbox.Size = new System.Drawing.Size(82, 18);
             this.AutosaveCheckbox.TabIndex = 17;
             this.AutosaveCheckbox.Text = "Autosave";
             this.AutosaveCheckbox.UseVisualStyleBackColor = true;
             // 
-            // label7
+            // SaveLabel
             // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(7, 204);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(98, 14);
-            this.label7.TabIndex = 16;
-            this.label7.Text = "Save filepath";
+            this.SaveLabel.AutoSize = true;
+            this.SaveLabel.Enabled = false;
+            this.SaveLabel.Location = new System.Drawing.Point(7, 204);
+            this.SaveLabel.Name = "SaveLabel";
+            this.SaveLabel.Size = new System.Drawing.Size(98, 14);
+            this.SaveLabel.TabIndex = 16;
+            this.SaveLabel.Text = "Save filepath";
             // 
-            // textBox2
+            // SavePath_textbox
             // 
-            this.textBox2.Location = new System.Drawing.Point(7, 221);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(204, 22);
-            this.textBox2.TabIndex = 15;
+            this.SavePath_textbox.Enabled = false;
+            this.SavePath_textbox.Location = new System.Drawing.Point(7, 221);
+            this.SavePath_textbox.Name = "SavePath_textbox";
+            this.SavePath_textbox.Size = new System.Drawing.Size(204, 22);
+            this.SavePath_textbox.TabIndex = 15;
             // 
-            // button9
+            // DeleteButton
             // 
-            this.button9.Font = new System.Drawing.Font("Microsoft YaHei", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.button9.Location = new System.Drawing.Point(77, 168);
-            this.button9.Name = "button9";
-            this.button9.Size = new System.Drawing.Size(64, 24);
-            this.button9.TabIndex = 14;
-            this.button9.Text = "Delete";
-            this.button9.UseVisualStyleBackColor = true;
+            this.DeleteButton.Enabled = false;
+            this.DeleteButton.Font = new System.Drawing.Font("Microsoft YaHei", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.DeleteButton.Location = new System.Drawing.Point(77, 168);
+            this.DeleteButton.Name = "DeleteButton";
+            this.DeleteButton.Size = new System.Drawing.Size(64, 24);
+            this.DeleteButton.TabIndex = 14;
+            this.DeleteButton.Text = "Delete";
+            this.DeleteButton.UseVisualStyleBackColor = true;
+            this.DeleteButton.Click += new System.EventHandler(this.DeleteButton_Click);
             // 
-            // button8
+            // ImportButton
             // 
-            this.button8.Font = new System.Drawing.Font("Microsoft YaHei", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.button8.Location = new System.Drawing.Point(7, 168);
-            this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(64, 24);
-            this.button8.TabIndex = 13;
-            this.button8.Text = "Import";
-            this.button8.UseVisualStyleBackColor = true;
+            this.ImportButton.Enabled = false;
+            this.ImportButton.Font = new System.Drawing.Font("Microsoft YaHei", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.ImportButton.Location = new System.Drawing.Point(7, 168);
+            this.ImportButton.Name = "ImportButton";
+            this.ImportButton.Size = new System.Drawing.Size(64, 24);
+            this.ImportButton.TabIndex = 13;
+            this.ImportButton.Text = "Import";
+            this.ImportButton.UseVisualStyleBackColor = true;
+            this.ImportButton.Click += new System.EventHandler(this.ImportButton_Click);
             // 
-            // button7
+            // NewButton
             // 
-            this.button7.Font = new System.Drawing.Font("Microsoft YaHei", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.button7.Location = new System.Drawing.Point(147, 50);
-            this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(64, 24);
-            this.button7.TabIndex = 12;
-            this.button7.Text = "New";
-            this.button7.UseVisualStyleBackColor = true;
+            this.NewButton.Font = new System.Drawing.Font("Microsoft YaHei", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.NewButton.Location = new System.Drawing.Point(147, 50);
+            this.NewButton.Name = "NewButton";
+            this.NewButton.Size = new System.Drawing.Size(64, 24);
+            this.NewButton.TabIndex = 12;
+            this.NewButton.Text = "New";
+            this.NewButton.UseVisualStyleBackColor = true;
+            this.NewButton.Click += new System.EventHandler(this.NewButton_Click);
             // 
             // label6
             // 
@@ -366,22 +419,23 @@
             this.label6.TabIndex = 2;
             this.label6.Text = "Select AI";
             // 
-            // listBox1
+            // AI_List
             // 
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.ItemHeight = 14;
-            this.listBox1.Items.AddRange(new object[] {
-            "Default"});
-            this.listBox1.Location = new System.Drawing.Point(7, 74);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(204, 88);
-            this.listBox1.TabIndex = 1;
+            this.AI_List.FormattingEnabled = true;
+            this.AI_List.ItemHeight = 14;
+            this.AI_List.Items.AddRange(new object[] {
+            "Default_ML"});
+            this.AI_List.Location = new System.Drawing.Point(7, 74);
+            this.AI_List.Name = "AI_List";
+            this.AI_List.Size = new System.Drawing.Size(204, 88);
+            this.AI_List.TabIndex = 1;
+            this.AI_List.SelectedIndexChanged += new System.EventHandler(this.AI_List_SelectedIndexChanged);
             // 
             // label5
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Consolas", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label5.Location = new System.Drawing.Point(21, 10);
+            this.label5.Location = new System.Drawing.Point(7, 4);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(142, 24);
             this.label5.TabIndex = 0;
@@ -392,7 +446,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 420);
-            this.Controls.Add(this.panel3);
+            this.Controls.Add(this.AI_Settings_Panel);
             this.Controls.Add(this.button6);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
@@ -411,8 +465,8 @@
             this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
-            this.panel3.ResumeLayout(false);
-            this.panel3.PerformLayout();
+            this.AI_Settings_Panel.ResumeLayout(false);
+            this.AI_Settings_Panel.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -434,22 +488,25 @@
         private Button button4;
         private Button button5;
         private Button button6;
-        private Panel panel3;
+        private Panel AI_Settings_Panel;
         private Label label6;
-        private ListBox listBox1;
+        private ListBox AI_List;
         private Label label5;
-        private Button button9;
-        private Button button8;
-        private Button button7;
+        private Button DeleteButton;
+        private Button ImportButton;
+        private Button NewButton;
         private CheckBox AutosaveCheckbox;
-        private Label label7;
-        private TextBox textBox2;
-        private Label label8;
-        private TextBox LearnRate_textbox;
-        private Label label9;
+        private Label SaveLabel;
+        private TextBox SavePath_textbox;
+        private Label LR_Label;
+        private TextBox LR_textbox;
+        private Label Depth_Label;
         private TextBox Depth_textbox;
-        private Button button10;
-        private Button button11;
-        private Button button12;
+        private Button ApplyButton;
+        private Button CopyButton;
+        private Button TrainButton;
+        private Button CloseButton;
+        private Label NameLabel;
+        private TextBox Name_textbox;
     }
 }

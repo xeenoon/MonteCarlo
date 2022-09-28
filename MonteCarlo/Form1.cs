@@ -53,7 +53,7 @@ namespace MonteCarlo
                 {
                     return randomAI;
                 }
-                var ML = models.FirstOrDefault(m=>m.GetName() == selected);
+                var ML = models.FirstOrDefault(m=>m.nameID == selected);
                 return ML; //If ML is null, then the computer player will be null, i.e. it is a humans turn
             }
         }
@@ -70,7 +70,7 @@ namespace MonteCarlo
                 {
                     return randomAI;
                 }
-                var ML = models.FirstOrDefault(m => m.GetName() == selected);
+                var ML = models.FirstOrDefault(m => m.nameID == selected);
                 return ML; //If ML is null, then the computer player will be null, i.e. it is a humans turn
             }
         }
@@ -225,19 +225,6 @@ namespace MonteCarlo
 
         }
 
-        private void AddNewModel(object sender, EventArgs e)
-        {
-            openFileDialog1 = new OpenFileDialog();
-            openFileDialog1.Filter = "ML files (*.TML)|*.TML";
-            openFileDialog1.FilterIndex = 1;
-            openFileDialog1.RestoreDirectory = true;
-            if (openFileDialog1.ShowDialog() == DialogResult.OK)
-            {
-                var path = Path.GetFullPath(openFileDialog1.FileName);
-                TorchNetwork toadd = new TorchNetwork(path.Split("\\").Last(), 42, 7, path, true, 0.0005, Log, 1000);
-                selectedModel.load(path);
-            }
-        }
         TorchNetwork selectedModel;
         private void button4_Click(object sender, EventArgs e)
         {
@@ -267,6 +254,237 @@ namespace MonteCarlo
         private void button5_Click(object sender, EventArgs e)
         {
             panel2.Visible = false;
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            AI_Settings_Panel.Visible = true;
+        }
+        public void ShowAIData()
+        {
+            string selected_AI = (string)AI_List.SelectedItem;
+            selectedModel = models.FirstOrDefault(n=>n.nameID == selected_AI);
+            if (selectedModel == null)
+            {
+                ImportButton.Enabled = false;
+                DeleteButton.Enabled = false;
+                CopyButton.Enabled = false;
+                SaveLabel.Enabled = false;
+                SavePath_textbox.Enabled = false;
+
+                NameLabel.Enabled = false;
+                Name_textbox.Enabled = false;
+
+                AutosaveCheckbox.Enabled = false;
+
+                LR_Label.Enabled = false;
+                LR_textbox.Enabled = false;
+
+                Depth_Label.Enabled = false;
+                Depth_textbox.Enabled = false;
+
+                ApplyButton.Enabled = false;
+                TrainButton.Enabled = false;
+                CloseButton.Enabled = false;
+
+                Name_textbox.Text = "";
+                AutosaveCheckbox.Checked = false;
+                LR_textbox.Text = "";
+                Depth_textbox.Text = "";
+                SavePath_textbox.Text = "";
+
+                //Hide all the stuff
+
+                return;
+            }
+            ImportButton.Enabled = true;
+            DeleteButton.Enabled = true;
+            CopyButton.Enabled = true;
+            SaveLabel.Enabled = true;
+            SavePath_textbox.Enabled = true;
+
+            NameLabel.Enabled = true;
+            Name_textbox.Enabled = true;
+
+            AutosaveCheckbox.Enabled = true;
+
+            LR_Label.Enabled = true;
+            LR_textbox.Enabled = true;
+
+            Depth_Label.Enabled = true;
+            Depth_textbox.Enabled = true;
+
+            ApplyButton.Enabled = true;
+            TrainButton.Enabled = true;
+            CloseButton.Enabled = true; //Show all the stuff
+
+            Name_textbox.Text = selected_AI;
+            AutosaveCheckbox.Checked = selectedModel.autosave;
+            LR_textbox.Text = selectedModel.learnrate.ToString();
+            Depth_textbox.Text = selectedModel.depth.ToString();
+            SavePath_textbox.Text = selectedModel.filepath;
+        }
+        bool dontupdate = false;
+        private void AI_List_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (dontupdate)
+            {
+                return;
+            }
+            if (selectedModel == null || SaveChanges())
+            {
+                ShowAIData();
+            }
+        }
+
+        private void CloseButton_Click(object sender, EventArgs e)
+        {
+            if (SaveChanges())
+            {
+                AI_Settings_Panel.Visible = false;
+                AI_List.SelectedIndex = -1;
+            }
+        }
+        public bool SaveChanges()
+        {
+            if (selectedModel == null)
+            {
+                return false;
+            }
+
+            selectedModel.autosave = AutosaveCheckbox.Checked;
+            if (selectedModel.nameID != Name_textbox.Text)
+            {
+                if (AI_List.Items.Contains(Name_textbox.Text))
+                {
+                    var result = MessageBox.Show("No duplicate names allowed", "Invalid input", MessageBoxButtons.OKCancel);
+                    if (result == DialogResult.OK)
+                    {
+                        return false; //Allow user to enter again
+                    }
+                    //Otherwise continue with other results
+                }
+                dontupdate = true;
+
+                RedPlayerBox.Items.Add(Name_textbox.Text);
+                GreenPlayerBox.Items.Add(Name_textbox.Text);
+
+                RedPlayerBox.Items.Remove(selectedModel.nameID);
+                GreenPlayerBox.Items.Remove(selectedModel.nameID);
+
+
+                AI_List.Items.Remove(selectedModel.nameID);
+                selectedModel.nameID = Name_textbox.Text;
+                AI_List.Items.Add(selectedModel.nameID);
+
+
+                dontupdate = false;
+                AI_List.SelectedIndex = AI_List.Items.IndexOf(selectedModel.nameID);
+            }
+            double lr = 0;
+            if (!double.TryParse(LR_textbox.Text, out lr))
+            {
+                var result = MessageBox.Show("Please enter a valid decimal for \"learn rate\"", "Invalid input",MessageBoxButtons.OKCancel);
+                if (result == DialogResult.OK)
+                {
+                    return false; //Allow user to enter again
+                }
+                //Otherwise continue with other results
+            }
+            else
+            {
+                selectedModel.learnrate = lr;
+            }
+
+            int depth = 0;
+            if (!int.TryParse(Depth_textbox.Text, out depth))
+            {
+                var result = MessageBox.Show("Please enter a valid decimal for \"depth\"", "Invalid input", MessageBoxButtons.OKCancel);
+                if (result == DialogResult.OK)
+                {
+                    return false; //Allow user to enter again
+                }
+                //Otherwise continue with other results
+            }
+            else
+            {
+                selectedModel.depth = depth;
+            }
+
+            var possiblePath = SavePath_textbox.Text.IndexOfAny(Path.GetInvalidPathChars()) == -1;
+            if (possiblePath)
+            {
+                selectedModel.filepath = SavePath_textbox.Text;
+            }
+            else
+            {
+                var result = MessageBox.Show("Please enter a valid path for \"Save filepath\"", "Invalid input", MessageBoxButtons.OKCancel);
+                if (result == DialogResult.OK)
+                {
+                    return false; //Allow user to enter again
+                }
+                //Otherwise continue with other results
+            }
+
+            return true; //Successfully changed stuff
+        }
+
+        private void ApplyButton_Click(object sender, EventArgs e)
+        {
+            if (SaveChanges())
+            {
+                ShowAIData();
+            }
+        }
+        Random r = new Random();
+        private void NewButton_Click(object sender, EventArgs e)
+        {
+            int random = 1;
+            string randomname = "RandomName";
+            while (models.Any(m=>m.nameID == randomname))
+            {
+                random = r.Next();
+                randomname = "RandomName" + random;
+            }
+            var model = new TorchNetwork(randomname, 42, 7, string.Format(@"C:\Users\{0}\Downloads\{1}.TML", Environment.UserName, randomname), true, 0.0005, Log, 1000);
+
+            AI_List.Items.Add(randomname);
+            models.Add(model);
+            AI_List.SelectedIndex = AI_List.Items.IndexOf(randomname);
+            RedPlayerBox.Items.Add(randomname);
+            GreenPlayerBox.Items.Add(randomname);
+            ShowAIData();
+        }
+
+        private void DeleteButton_Click(object sender, EventArgs e)
+        {
+            if (selectedModel == null)
+            {
+                return;
+            }
+            AI_List.Items.Remove(selectedModel.nameID);
+            models.Remove(selectedModel);
+            ShowAIData();
+        }
+
+        private void TrainButton_Click(object sender, EventArgs e)
+        {
+            panel2.Visible = true;
+        }
+
+        private void ImportButton_Click(object sender, EventArgs e)
+        {
+            openFileDialog1 = new OpenFileDialog();
+            openFileDialog1.Filter = "ML files (*.TML)|*.TML";
+            openFileDialog1.FilterIndex = 1;
+            openFileDialog1.RestoreDirectory = true;
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                var path = Path.GetFullPath(openFileDialog1.FileName);
+                TorchNetwork toadd = new TorchNetwork(path.Split("\\").Last(), 42, 7, path, true, 0.0005, Log, 1000);
+                selectedModel.load(path);
+                ShowAIData();
+            }
         }
     }
 }

@@ -31,6 +31,7 @@ namespace AI
         private Linear valueHead;
 
         public Device device;
+        public string nameID;
 
         public string filepath { get; set; }
         public bool autosave { get; set; }
@@ -38,7 +39,7 @@ namespace AI
         public int depth { get; set; }
         public Func<string, bool> logger { get; set; }
 
-        public TorchNetwork(string name, int boardsize, int actionsize, string filepath, bool autosave, double learningrate, Func<string,bool> logger, int depth) : base(name)
+        public TorchNetwork(string nameID, int boardsize, int actionsize, string filepath, bool autosave, double learningrate, Func<string,bool> logger, int depth) : base(nameID)
         {
             this.fc1 = nn.Linear(boardsize, 336);
             this.fc2 = nn.Linear(336, 336);
@@ -50,7 +51,8 @@ namespace AI
             this.to(torch.device("cpu"));
             this.device = torch.device("cpu");
 
-            this.name = name;
+            this.name = nameID;
+            this.nameID = nameID;
 
             RegisterComponents();
 

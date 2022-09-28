@@ -112,7 +112,7 @@ namespace AI
         }
         private void Train(List<ProbabilityDistribution> examples)
         {
-            var optimizer = optim.Adam(model.parameters(), 0.0001);
+            var optimizer = optim.Adam(model.parameters(), model.learnrate);
             List<float> pi_losses = new List<float>();
             List<float> v_losses = new List<float>();
 
@@ -170,7 +170,10 @@ namespace AI
             //Console.WriteLine(LastProbExamples.ToList().ToArray().Write());
             //Log(model.Predict(new BackendBoard(6, 7, 4).board).probabilities.Write());
             optimizer.Dispose();
-            Save(@"G:\ML_Data", "366x366.TML");
+            if (model.autosave)
+            {
+                model.SaveModel();
+            }
         }
 
         private void Save(string folder, string filename)
