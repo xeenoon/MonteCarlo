@@ -36,11 +36,11 @@ namespace ConsoleTester
                 {"epochs",2},
             };
             var game = new BackendBoard(6, 7, 4);
-            var model = new TorchNetwork("bob", 42, 7);
+           // var model = new TorchNetwork("bob", 42, 7);
 
-            var trainer = new Trainer(game, model, arguments, Write);
-            trainer.Learn();
-            Console.WriteLine(model.Predict(game.board).probabilities.Write());
+          //  var trainer = new Trainer(game, model, arguments, Write);
+          //  trainer.Learn();
+          //  Console.WriteLine(model.Predict(game.board).probabilities.Write());
             Console.WriteLine("Finished training");
 
             Console.ReadLine();
