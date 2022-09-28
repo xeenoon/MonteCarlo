@@ -1,6 +1,7 @@
 using System.Timers;
 using TorchSharp;
 using Game;
+using static TorchSharp.torch;
 
 namespace MonteCarlo
 {
@@ -245,6 +246,8 @@ namespace MonteCarlo
                     MessageBox.Show(String.Format("Training beggining for {0} iterations", iterations));
                     MiniMax.TrainML(iterations, Log);
                     MessageBox.Show("Training finished");
+                    torch.NewDisposeScope();
+                    MessageBox.Show("Tensors: " + Tensor.TotalCount);
                 }
             }
             else

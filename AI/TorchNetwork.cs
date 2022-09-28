@@ -32,12 +32,12 @@ namespace AI
 
         public TorchNetwork(string name, int boardsize, int actionsize) : base(name)
         {
-            this.fc1 = nn.Linear(boardsize, 168);
-            this.fc2 = nn.Linear(168, 168);
+            this.fc1 = nn.Linear(boardsize, 336);
+            this.fc2 = nn.Linear(336, 336);
 
 
-            this.actionHead = nn.Linear(168, actionsize);
-            this.valueHead = nn.Linear(168, 1);
+            this.actionHead = nn.Linear(336, actionsize);
+            this.valueHead = nn.Linear(336, 1);
 
             this.to(torch.device("cpu"));
             this.device = torch.device("cpu");
@@ -71,6 +71,7 @@ namespace AI
             Softmax softmax = nn.Softmax(x.Dimensions-1);
 
             Tensor tensor_v = softmax.forward(action_logits);
+            softmax.Dispose();
             return new TensorTuple(tensor_v, tanh_v);
         }
         public DoubleTuple Predict(Array data)
@@ -82,7 +83,6 @@ namespace AI
             
             var x = tuple.tensor1.cpu().data<float>().ToArray(); //Probability representation in board int[] format
             var y = tuple.tensor2.cpu().data <float>()[0]; //Array only ever has one item
-
             return new DoubleTuple(x,y);
         }
     }

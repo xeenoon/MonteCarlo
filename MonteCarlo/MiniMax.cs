@@ -85,7 +85,7 @@ namespace MonteCarlo
                 {"num_simulations",100},
                 {"numEps",100},
                 {"numItersForTrainExamplesHistory",20},
-                {"epochs",2},
+                {"epochs",10},
             };
             var game = new BackendBoard(6, 7, 4);
             

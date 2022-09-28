@@ -86,14 +86,13 @@ namespace AI
             {
                 Stopwatch stopwatch = new Stopwatch();
                 stopwatch.Start();
-                var ccbag = new ConcurrentBag<ProbabilityDistribution>();
-                Parallel.For(0, args["numEps"], e =>
+                var trainexamples = new List<ProbabilityDistribution>();
+                for (int e = 0; e < args["numEps"]; ++e)
                 {
                     var examples = ExcecuteEpisode(); //Simulate a game
-                    ccbag.AddRange(examples); //Add the game positions
-                });
+                    trainexamples.AddRange(examples); //Add the game positions
+                }
                 stopwatch.Stop();
-                var trainexamples = ccbag.ToList();
                 trainexamples.Shuffle();
                 paralellticks += stopwatch.ElapsedTicks;
 
@@ -111,10 +110,9 @@ namespace AI
             mcts = null;
             GC.Collect();
         }
-
         private void Train(List<ProbabilityDistribution> examples)
         {
-            var optimizer = optim.Adam(model.parameters(), 0.0005);
+            var optimizer = optim.Adam(model.parameters(), 0.0001);
             List<float> pi_losses = new List<float>();
             List<float> v_losses = new List<float>();
 
@@ -159,8 +157,7 @@ namespace AI
 
                     batchidx++;
 
-                  //  LastPiExamples = data.tensor1.detach();
-                  //  LastProbExamples = probabilities[0];
+                    GC.Collect();
                 }
             }
 
@@ -173,6 +170,7 @@ namespace AI
             //Console.WriteLine(LastProbExamples.ToList().ToArray().Write());
             //Log(model.Predict(new BackendBoard(6, 7, 4).board).probabilities.Write());
             optimizer.Dispose();
+            Save(@"C:\Users\chris\Downloads", "model.TML");
         }
 
         private void Save(string folder, string filename)
@@ -182,7 +180,8 @@ namespace AI
                 Directory.CreateDirectory(folder);
             }
             var filepath = folder + "\\" + filename;
-            model.Save(filepath);
+            File.WriteAllText(filepath,""); //Clear the file
+            model.save(filepath);
         }
         private Tensor Loss_pi(Tensor targets, ref Tensor outputs)
         {
