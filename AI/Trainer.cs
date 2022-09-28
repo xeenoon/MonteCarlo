@@ -78,8 +78,6 @@ namespace AI
                 }
             }
         }
-        public double paralellticks = 0;
-        public double normalticks = 0;
         public void Learn()
         {
             for (int i = 0; i < args["numIters"]; ++i) //Iterate through the iterations requested
@@ -92,20 +90,15 @@ namespace AI
                     var examples = ExcecuteEpisode(); //Simulate a game
                     trainexamples.AddRange(examples); //Add the game positions
                 }
-                stopwatch.Stop();
                 trainexamples.Shuffle();
-                paralellticks += stopwatch.ElapsedTicks;
 
-                stopwatch.Restart();
                 Log("");
                 Log(string.Format("{0} out of {1} iterations train data: ", i+1, args["numIters"]));
                 Train(trainexamples);
                 stopwatch.Stop();
-                normalticks += stopwatch.ElapsedTicks; Log(String.Format("Paralell ticks: {0}, Main thread ticks: {1}", paralellticks, normalticks));
+                Log(String.Format("Iteration time: {0} seconds", stopwatch.ElapsedMilliseconds/1000));
+                Log("Estimated time: " + ((args["numIters"]-i) * (stopwatch.ElapsedMilliseconds / 1000)));
                 Log("------------------------------------------");
-
-          //      var filename = "latest.pth";
-          //      Save(".", filename);
             }
             mcts = null;
             GC.Collect();
@@ -168,7 +161,7 @@ namespace AI
             Log("Start pos result:");
             //Console.WriteLine(LastPiExamples[0].ToList().ToArray().Write());
             //Console.WriteLine(LastProbExamples.ToList().ToArray().Write());
-            //Log(model.Predict(new BackendBoard(6, 7, 4).board).probabilities.Write());
+            Log(model.Predict(new BackendBoard(6, 7, 4).board).probabilities.Write());
             optimizer.Dispose();
             if (model.autosave)
             {
