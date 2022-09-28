@@ -9,6 +9,11 @@ namespace MonteCarlo
 {
     internal static class Extensions
     {
+        static Random random = new Random();
+        public static T RanChoice<T>(this T[] array)
+        {
+            return array[random.Next(0, array.Length)];
+        }
         public static List<int> Copy(this List<int> tocopy)
         {
             List<int> result = new List<int>();

@@ -162,7 +162,7 @@ namespace AI
         }
 
     }
-    public interface Model
+    public interface Model : ComputerPlayer
     {
         public DoubleTuple Predict(Array data);
         public Func<string, bool> logger { get; set; }
@@ -174,11 +174,13 @@ namespace AI
 
         public int depth { get; set; }
         public int EstMove(BackendBoard backendBoard, int s);
-        public int BestMove(BackendBoard backendBoard, int s);
 
         public string filepath { get; set; }
         public bool autosave { get; set; }
         public double learnrate { get; set; }
-
+    }
+    public interface ComputerPlayer
+    {
+        public int BestMove(BackendBoard backendBoard, int s);
     }
 }

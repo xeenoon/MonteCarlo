@@ -2,23 +2,35 @@ using System.Timers;
 using TorchSharp;
 using Game;
 using static TorchSharp.torch;
+using AI;
 
 namespace MonteCarlo
 {
-    enum PlayerType
-    {
-        Human,
-        ML,
-        MCTS,
-        MinMax
-    }
     public partial class Form1 : Form
     {
-        ConnectBoard connectBoard;
+        string playerType;
 
+        ConnectBoard connectBoard;
+        public static List<TorchNetwork> models = new List<TorchNetwork>();
+        MiniMax minmax = new MiniMax();
+        RandomAI randomAI = new RandomAI();
         public Form1()
         {
             InitializeComponent();
+
+            models.Add(new TorchNetwork("Default_ML", 42, 7, string.Format(@"C:\Users\{0}\Downloads\Default.TML",Environment.UserName),true, 0.0005, Log,1000));
+
+            GreenPlayerBox.Items.Clear();
+            GreenPlayerBox.Items.Add("Human");
+            GreenPlayerBox.Items.Add("Random");
+            GreenPlayerBox.Items.Add("Brute force");
+            GreenPlayerBox.Items.Add("Default_ML");
+
+            RedPlayerBox.Items.Clear();
+            RedPlayerBox.Items.Add("Human");
+            RedPlayerBox.Items.Add("Random");
+            RedPlayerBox.Items.Add("Brute force");
+            RedPlayerBox.Items.Add("Default_ML");
 
             GreenPlayerBox.SelectedIndex = 0;
             RedPlayerBox.SelectedIndex = 0;
@@ -28,18 +40,38 @@ namespace MonteCarlo
         bool runagain = true;
 
         int firstplayer = 1;
-        PlayerType red
+        ComputerPlayer red
         {
             get
             {
-                return (PlayerType)RedPlayerBox.SelectedIndex;
+                var selected = (string)RedPlayerBox.SelectedItem;
+                if (selected.ToLower() == "brute force") //Default AI
+                {
+                    return minmax;
+                }
+                if (selected.ToLower() == "random")
+                {
+                    return randomAI;
+                }
+                var ML = models.FirstOrDefault(m=>m.GetName() == selected);
+                return ML; //If ML is null, then the computer player will be null, i.e. it is a humans turn
             }
         }
-        PlayerType green
+        ComputerPlayer green
         {
             get
             {
-                return (PlayerType)GreenPlayerBox.SelectedIndex;
+                var selected = (string)GreenPlayerBox.SelectedItem;
+                if (selected.ToLower() == "minmax") //Default AI
+                {
+                    return minmax;
+                }
+                if (selected.ToLower() == "random")
+                {
+                    return randomAI;
+                }
+                var ML = models.FirstOrDefault(m => m.GetName() == selected);
+                return ML; //If ML is null, then the computer player will be null, i.e. it is a humans turn
             }
         }
         private void Form1_Paint(object sender, PaintEventArgs e)
@@ -111,48 +143,36 @@ namespace MonteCarlo
 
         private void PlayTurn(ref int value)
         {
-            if (connectBoard != null && connectBoard.backendBoard.IsFinished())
+            if (connectBoard == null)
+            {
+                return;
+            }
+            if (connectBoard.backendBoard.IsFinished())
             {
                 return;
             }
             int position = -1;
             if (value == 1) //Red
             {
-                switch (red)
+                if (red != null) //Computer playing
                 {
-                    case PlayerType.Human:
-                        break;
-                    case PlayerType.ML:
-                        position = MiniMax.ML_PROB_Move(connectBoard.backendBoard, value);
-                        break;
-                    case PlayerType.MinMax:
-                        position = MiniMax.BestMove(connectBoard.backendBoard, value);
-                        break;
-                    case PlayerType.MCTS:
-                        position = MiniMax.Best_ML_Move(connectBoard.backendBoard, value);
-                        break;
+                    position = red.BestMove(connectBoard.backendBoard, value);
                 }
             }
             else
             {
-                switch (green)
+                if (green != null) //Computer playing
                 {
-                    case PlayerType.Human:
-                        break;
-                    case PlayerType.ML:
-                        position = MiniMax.ML_PROB_Move(connectBoard.backendBoard, value);
-                        break;
-                    case PlayerType.MinMax:
-                        position = MiniMax.BestMove(connectBoard.backendBoard, value);
-                        break;
-                    case PlayerType.MCTS:
-                        position = MiniMax.Best_ML_Move(connectBoard.backendBoard, value);
-                        break;
+                    position = green.BestMove(connectBoard.backendBoard, value);
                 }
             }
             if (position == -1) //No moves?
             {
                 return;
+            }
+            else if (position >= 7)
+            {
+
             }
             else
             {
@@ -170,7 +190,7 @@ namespace MonteCarlo
             {
                 return;
             }
-            if ((hasturn == 1 && red != PlayerType.Human) || (hasturn == 0 && green != PlayerType.Human)) //Are we trying to play an AI's turn
+            if ((hasturn == 1 && red != null) || (hasturn == 0 && green != null)) //Are we trying to play an AI's turn
             {
                 return;
             }
@@ -205,20 +225,7 @@ namespace MonteCarlo
 
         }
 
-        private void SaveModel(object sender, EventArgs e)
-        {
-            saveFileDialog1 = new SaveFileDialog();
-            saveFileDialog1.Filter = "ML files (*.TML)|*.TML|All files (*.*)|*.*";
-            saveFileDialog1.FilterIndex = 1;
-            saveFileDialog1.RestoreDirectory = true;
-            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
-            {
-                var path = Path.GetFullPath(saveFileDialog1.FileName);
-                MiniMax.model.save(path);
-            }
-        }
-
-        private void button3_Click(object sender, EventArgs e)
+        private void AddNewModel(object sender, EventArgs e)
         {
             openFileDialog1 = new OpenFileDialog();
             openFileDialog1.Filter = "ML files (*.TML)|*.TML";
@@ -227,10 +234,11 @@ namespace MonteCarlo
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 var path = Path.GetFullPath(openFileDialog1.FileName);
-                MiniMax.model.load(path);
+                TorchNetwork toadd = new TorchNetwork(path.Split("\\").Last(), 42, 7, path, true, 0.0005, Log, 1000);
+                selectedModel.load(path);
             }
         }
-
+        TorchNetwork selectedModel;
         private void button4_Click(object sender, EventArgs e)
         {
             var iterations = -1;
@@ -244,7 +252,7 @@ namespace MonteCarlo
                 {
                     panel2.Visible = false;
                     MessageBox.Show(String.Format("Training beggining for {0} iterations", iterations));
-                    MiniMax.TrainML(iterations, Log);
+                    selectedModel.Train(iterations);
                     MessageBox.Show("Training finished");
                     torch.NewDisposeScope();
                     MessageBox.Show("Tensors: " + Tensor.TotalCount);
