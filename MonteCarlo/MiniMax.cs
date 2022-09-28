@@ -49,7 +49,7 @@ namespace MonteCarlo
             {
                 s = 1; //Reset s to 1
             }
-            var args = new Dictionary<string, int>() { { "num_simulations", 100 } };
+            var args = new Dictionary<string, int>() { { "num_simulations", 10000 } };
 
             var mcts = new MCTS(args);
             var root = mcts.Run(model, game, s);

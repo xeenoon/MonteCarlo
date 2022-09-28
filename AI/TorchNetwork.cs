@@ -83,7 +83,8 @@ namespace AI
             
             var x = tuple.tensor1.cpu().data<float>().ToArray(); //Probability representation in board int[] format
             var y = tuple.tensor2.cpu().data <float>()[0]; //Array only ever has one item
-            return new DoubleTuple(x,y);
+         //   float[] x1 = new float[7] { 0.14285714f, 0.14285714f, 0.14285714f, 0.14285714f, 0.14285714f, 0.14285714f, 0.14285714f};
+            return new DoubleTuple(x, y);
         }
     }
 }

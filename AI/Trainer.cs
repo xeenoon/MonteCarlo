@@ -61,7 +61,7 @@ namespace AI
                 action_probs = action_probs.Divide(action_probs.Sum());
                 train_examples.Add(new ProbabilityDistribution(reverse, current_player, action_probs));
 
-                var action = root.SelectAction(0);
+                var action = root.SelectAction(1);
                 state = state.NextState(current_player, action); //Simulate the move
                 current_player *= -1;
                 var reward = state.GetReward(current_player);
@@ -170,7 +170,7 @@ namespace AI
             //Console.WriteLine(LastProbExamples.ToList().ToArray().Write());
             //Log(model.Predict(new BackendBoard(6, 7, 4).board).probabilities.Write());
             optimizer.Dispose();
-            Save(@"C:\Users\chris\Downloads", "model.TML");
+            Save(@"G:\ML_Data", "366x366.TML");
         }
 
         private void Save(string folder, string filename)
