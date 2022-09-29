@@ -61,7 +61,7 @@ namespace AI
                 action_probs = action_probs.Divide(action_probs.Sum());
                 train_examples.Add(new ProbabilityDistribution(reverse, current_player, action_probs));
 
-                var action = root.SelectAction(1);
+                var action = root.SelectAction(2);
                 state = state.NextState(current_player, action); //Simulate the move
                 current_player *= -1;
                 var reward = state.GetReward(current_player);

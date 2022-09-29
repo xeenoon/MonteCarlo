@@ -14,6 +14,7 @@ namespace MonteCarlo
         public static List<TorchNetwork> models = new List<TorchNetwork>();
         MiniMax minmax = new MiniMax();
         RandomAI randomAI = new RandomAI();
+        MCTS_AI mcts = new MCTS_AI(10000);
         public Form1()
         {
             InitializeComponent();
@@ -25,12 +26,14 @@ namespace MonteCarlo
             GreenPlayerBox.Items.Add("Random");
             GreenPlayerBox.Items.Add("Brute force");
             GreenPlayerBox.Items.Add("Default_ML");
+            GreenPlayerBox.Items.Add("MCTS");
 
             RedPlayerBox.Items.Clear();
             RedPlayerBox.Items.Add("Human");
             RedPlayerBox.Items.Add("Random");
             RedPlayerBox.Items.Add("Brute force");
             RedPlayerBox.Items.Add("Default_ML");
+            RedPlayerBox.Items.Add("MCTS");
 
             GreenPlayerBox.SelectedIndex = 0;
             RedPlayerBox.SelectedIndex = 0;
@@ -53,6 +56,10 @@ namespace MonteCarlo
                 {
                     return randomAI;
                 }
+                if (selected.ToLower() == "mcts")
+                {
+                    return mcts;
+                }
                 var ML = models.FirstOrDefault(m=>m.nameID == selected);
                 return ML; //If ML is null, then the computer player will be null, i.e. it is a humans turn
             }
@@ -62,13 +69,17 @@ namespace MonteCarlo
             get
             {
                 var selected = (string)GreenPlayerBox.SelectedItem;
-                if (selected.ToLower() == "minmax") //Default AI
+                if (selected.ToLower() == "brute force") //Default AI
                 {
                     return minmax;
                 }
                 if (selected.ToLower() == "random")
                 {
                     return randomAI;
+                }
+                if (selected.ToLower() == "mcts")
+                {
+                    return mcts;
                 }
                 var ML = models.FirstOrDefault(m => m.nameID == selected);
                 return ML; //If ML is null, then the computer player will be null, i.e. it is a humans turn

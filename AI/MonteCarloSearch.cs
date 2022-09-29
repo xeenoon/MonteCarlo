@@ -121,7 +121,7 @@ namespace AI
             {
                 this.args = args;
             }
-            public Node Run(TorchNetwork model, BackendBoard board_state, int toplay)
+            public Node Run(Model model, BackendBoard board_state, int toplay)
             {
                 var root = new Node(0,toplay);
      

@@ -110,7 +110,7 @@ namespace AI
             {
                 s = 1; //Reset s to 1
             }
-            var args = new Dictionary<string, int>() { { "num_simulations", 10000 } };
+            var args = new Dictionary<string, int>() { { "num_simulations", depth } };
 
             var mcts = new MCTS(args);
             var root = mcts.Run(this, game, s);
@@ -146,7 +146,7 @@ namespace AI
                 {"num_simulations",100},
                 {"numEps",100},
                 {"numItersForTrainExamplesHistory",20},
-                {"epochs",10},
+                {"epochs",2},
             };
             var game = new BackendBoard(6, 7, 4);
 
@@ -167,19 +167,34 @@ namespace AI
     public interface Model : ComputerPlayer
     {
         public DoubleTuple Predict(Array data);
-        public Func<string, bool> logger { get; set; }
-
-        public void SaveModel();
-        public void ExportModel(string filepath);
-
-        public void Train(int trainingdepth);
+        public int depth { get; set; }
+    }
+    public class MCTS_AI : Model
+    {
+        public MCTS_AI(int depth)
+        {
+            this.depth = depth;
+        }
 
         public int depth { get; set; }
-        public int EstMove(BackendBoard backendBoard, int s);
+        public int BestMove(BackendBoard backendBoard, int s)
+        {
+            var game = backendBoard.Flipp(s); //Keep same if 1, flip it is -1
+            if (s == -1)
+            {
+                s = 1; //Reset s to 1
+            }
+            var args = new Dictionary<string, int>() { { "num_simulations", depth } };
 
-        public string filepath { get; set; }
-        public bool autosave { get; set; }
-        public double learnrate { get; set; }
+            var mcts = new MCTS(args);
+            var root = mcts.Run(this, game, s);
+            return root.SelectChild().Key;
+        }
+
+        public DoubleTuple Predict(Array data)
+        {
+            return new DoubleTuple(new float[7] {0.142f, 0.142f, 0.142f, 0.142f, 0.142f, 0.142f, 0.142f},0);
+        }
     }
     public interface ComputerPlayer
     {
