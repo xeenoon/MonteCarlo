@@ -450,21 +450,11 @@ namespace MonteCarlo
         Random r = new Random();
         private void NewButton_Click(object sender, EventArgs e)
         {
-            int random = 1;
-            string randomname = "RandomName";
-            while (models.Any(m=>m.nameID == randomname))
-            {
-                random = r.Next();
-                randomname = "RandomName" + random;
-            }
-            var model = new TorchNetwork(randomname, 42, 7, string.Format(@"C:\Users\{0}\Downloads\{1}.TML", Environment.UserName, randomname), true, 0.0005, Log, 1000);
-
-            AI_List.Items.Add(randomname);
-            models.Add(model);
-            AI_List.SelectedIndex = AI_List.Items.IndexOf(randomname);
-            RedPlayerBox.Items.Add(randomname);
-            GreenPlayerBox.Items.Add(randomname);
-            ShowAIData();
+            ModelPanel.Visible = true;
+            layers = new List<Layer>() { Layer.BeginLinear, Layer.EndLinear };
+            Layer_listbox.Items.Clear();
+            Layer_listbox.Items.Add("Linear (fixed input)");
+            Layer_listbox.Items.Add("Linear (fixed output)");
         }
 
         private void DeleteButton_Click(object sender, EventArgs e)
@@ -495,6 +485,145 @@ namespace MonteCarlo
                 TorchNetwork toadd = new TorchNetwork(path.Split("\\").Last(), 42, 7, path, true, 0.0005, Log, 1000);
                 selectedModel.load(path);
                 ShowAIData();
+            }
+        }
+        List<Layer> layers = new List<Layer>() { Layer.BeginLinear, Layer.EndLinear };
+        private void button2_Click(object sender, EventArgs e)
+        {
+            Layer_listbox.Items.Insert(1,"Linear (fc1)");
+            Layer item = new Layer(Layer.LayerType.Linear, layers[0].outputsize, layers[1].inputsize);
+            layers.Insert(1, item);
+
+            ShowModelData(1, item);
+        }
+
+        private void ShowModelData(int index, Layer layer)
+        {
+            TransformationType_combobox.Items.Remove("");
+            
+            TransformationType_label.Enabled = true;
+            TransformationType_combobox.Enabled = true;
+            TransformationType_combobox.SelectedIndex = layer.type == Layer.LayerType.Convolutional ? 1 : 0;
+
+            InputSize_label.Enabled = true;
+            InputSize_textbox.Enabled = true;
+            InputSize_textbox.Text = layer.inputsize.ToString();
+
+            OutputSize_label.Enabled = true;
+            OutputSize_textbox.Enabled = true;
+            OutputSize_textbox.Text = layer.outputsize.ToString();
+
+            LayerIndex_label.Enabled = true;
+            LayerIndex_textbox.Enabled = true;
+            LayerIndex_textbox.Text = index.ToString();
+
+            if (layer.type == Layer.LayerType.Convolutional) 
+            {
+                Convolution_label.Enabled = true;
+                Stride_label.Enabled = true;
+                Stride_textbox.Enabled = true;
+                Stride_textbox.Text = layer.stridesize.ToString();
+            }
+
+            if (index == 0)
+            {
+                InputSize_textbox.Text = "42";
+                InputSize_textbox.Enabled = false;
+                InputSize_label.Enabled = false;
+                layer.inputsize = 42;
+                LayerIndex_label.Enabled = false;
+                LayerIndex_textbox.Enabled = false;
+            }
+            if (index == Layer_listbox.Items.Count - 1)
+            {
+                OutputSize_textbox.Text = "7";
+                OutputSize_textbox.Enabled = false;
+                OutputSize_label.Enabled = false;
+                layer.outputsize = 7;
+                TransformationType_combobox.Enabled = false;
+                TransformationType_combobox.SelectedIndex = 0;
+                TransformationType_label.Enabled = false;
+                layer.type = Layer.LayerType.Linear;
+                LayerIndex_label.Enabled = false;
+                LayerIndex_textbox.Enabled = false;
+            }
+        }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            int random = 1;
+            string randomname = "RandomName";
+            while (models.Any(m => m.nameID == randomname))
+            {
+                random = r.Next();
+                randomname = "RandomName" + random;
+            }
+            var model = new TorchNetwork(randomname, 42, 7, string.Format(@"C:\Users\{0}\Downloads\{1}.TML", Environment.UserName, randomname), true, 0.0005, Log, 1000);
+
+            AI_List.Items.Add(randomname);
+            models.Add(model);
+            AI_List.SelectedIndex = AI_List.Items.IndexOf(randomname);
+            RedPlayerBox.Items.Add(randomname);
+            GreenPlayerBox.Items.Add(randomname);
+            ShowAIData();
+        }
+
+        private void Close2_button_Click(object sender, EventArgs e)
+        {
+            ModelPanel.Visible = false;
+
+            TransformationType_label.Enabled = false;
+
+            if (TransformationType_combobox.SelectedIndex != -1)
+            {
+                TransformationType_combobox.Enabled = true; //Make sure it is active, allowing us to do the operation
+
+                TransformationType_combobox.Items.Add("");
+                TransformationType_combobox.SelectedIndex = 2;
+            }
+            TransformationType_combobox.Enabled = false;
+            
+            InputSize_label.Enabled = false;
+            InputSize_textbox.Enabled = false;
+            InputSize_textbox.Text = "";
+
+            OutputSize_label.Enabled = false;
+            OutputSize_textbox.Enabled = false;
+            OutputSize_textbox.Text = "";
+
+            LayerIndex_label.Enabled = false;
+            LayerIndex_textbox.Enabled = false;
+            LayerIndex_textbox.Text = "";
+
+
+            Convolution_label.Enabled = false;
+            Stride_label.Enabled = false;
+            Stride_textbox.Enabled = false;
+            Stride_textbox.Text = "";
+        }
+
+        private void Layer_listbox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ShowModelData(Layer_listbox.SelectedIndex, layers[Layer_listbox.SelectedIndex]);
+        }
+
+        private void TransformationType_combobox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (TransformationType_combobox.SelectedIndex == 1)
+            {
+                Convolution_label.Enabled = true;
+                Stride_label.Enabled = true;
+                Stride_textbox.Enabled = true;
+                layers[TransformationType_combobox.SelectedIndex].stridesize = 1;
+                Stride_textbox.Text = "1";
+            }
+            else
+            {
+                Convolution_label.Enabled = false;
+                Stride_label.Enabled = false;
+                Stride_textbox.Enabled = false;
+                layers[TransformationType_combobox.SelectedIndex].stridesize = 0;
+                Stride_textbox.Text = "";
             }
         }
     }

@@ -27,6 +27,11 @@ namespace AI
         private Linear fc1;
         private Linear fc2;
 
+        private Linear fc3;
+        private Linear fc4;
+
+        public List<Layer> layers = new();
+
         public Linear actionHead;
         private Linear valueHead;
 
@@ -41,12 +46,15 @@ namespace AI
 
         public TorchNetwork(string nameID, int boardsize, int actionsize, string filepath, bool autosave, double learningrate, Func<string,bool> logger, int depth) : base(nameID)
         {
-            this.fc1 = nn.Linear(boardsize, 336);
-            this.fc2 = nn.Linear(336, 336);
+            this.fc1 = nn.Linear(boardsize, 168);
+            this.fc2 = nn.Linear(168, 300);
+
+            this.fc3 = nn.Linear(300, 100);
+            this.fc4 = nn.Linear(100, 50);
 
 
-            this.actionHead = nn.Linear(336, actionsize);
-            this.valueHead = nn.Linear(336, 1);
+            this.actionHead = nn.Linear(50, actionsize);
+            this.valueHead = nn.Linear(50, 1);
 
             this.to(torch.device("cpu"));
             this.device = torch.device("cpu");
@@ -78,6 +86,8 @@ namespace AI
         {
             x = nn.functional.relu(fc1.cpu().forward(x));
             x = nn.functional.relu(fc2.cpu().forward(x)); //.foward????? only method that works
+            x = nn.functional.relu(fc3.cpu().forward(x));
+            x = nn.functional.relu(fc4.cpu().forward(x));
 
             var action_logits = actionHead.forward(x);
             var value_logit = valueHead.forward(x);
@@ -199,5 +209,36 @@ namespace AI
     public interface ComputerPlayer
     {
         public int BestMove(BackendBoard backendBoard, int s);
+    }
+
+    public class Layer
+    {
+        public enum LayerType
+        {
+            Linear,
+            Convolutional,
+        }
+        public LayerType type;
+        public int inputsize;
+        public int outputsize;
+
+        public int stridesize;
+
+        public static Layer BeginConv   = new Layer(LayerType.Convolutional, 42, 4, 1);
+        public static Layer BeginLinear = new Layer(LayerType.Linear       , 42, 60);
+        public static Layer EndLinear   = new Layer(LayerType.Linear       , 60, 7);
+        public Layer(LayerType type, int inputsize, int outputsize, int stridesize)
+        {
+            this.type = type;
+            this.inputsize = inputsize;
+            this.outputsize = outputsize;
+            this.stridesize = stridesize;
+        }
+        public Layer(LayerType type, int inputsize, int outputsize)
+        {
+            this.type = type;
+            this.inputsize = inputsize;
+            this.outputsize = outputsize;
+        }
     }
 }
