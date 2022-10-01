@@ -743,6 +743,15 @@ namespace MonteCarlo
             }
             else
             {
+                if (!(layerindex == lastindex) && (layerindex <= 0 || layerindex >= Layer_listbox.Items.Count - 1))
+                {
+                    var response = MessageBox.Show("Out of range input for \"layer index\", continue anyway?", "Invalid input", MessageBoxButtons.YesNo);
+                    if (response == DialogResult.Yes)
+                    {
+                        return false;
+                    }
+                    return true;
+                }
                 if (layerindex != lastindex)
                 {
                     ignore = true;
