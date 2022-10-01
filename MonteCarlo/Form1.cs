@@ -748,8 +748,8 @@ namespace MonteCarlo
                     ignore = true;
                     if (lastindex <= layerindex) //Placing thing below (an index higher)
                     {
-                        Layer_listbox.Items.Insert(layerindex, Layer_listbox.Items[lastindex]);
-                        layers.Insert(layerindex, layers[lastindex]);
+                        Layer_listbox.Items.Insert(layerindex+1, Layer_listbox.Items[lastindex]);
+                        layers.Insert(layerindex+1, layers[lastindex]); //+1 to put it in front of the other item that was there
                         //Indexes dont matter, as the item was placed above the selected index
                         Layer_listbox.Items.RemoveAt(lastindex); //Remove the item
                         layers.RemoveAt(lastindex);
@@ -762,7 +762,8 @@ namespace MonteCarlo
                         Layer_listbox.Items.RemoveAt(lastindex + 1); //Remove the item
                         layers.RemoveAt(lastindex+1);
                     }
-                    lastindex = Layer_listbox.SelectedIndex;
+                    lastindex = layerindex;
+                    Layer_listbox.SelectedIndex = layerindex;
                     ignore = false; //Stop onselectindexchanged running for listbox
                 }
             }
@@ -799,6 +800,66 @@ namespace MonteCarlo
         {
             lastindex = Layer_listbox.SelectedIndex;
             SaveModelData();
+        }
+
+        public object lb_item = null;
+
+        private void Layer_listbox_DragDrop(object sender, DragEventArgs e)
+        {
+            Point point = Layer_listbox.PointToClient(new Point(e.X, e.Y));
+            int index = this.Layer_listbox.IndexFromPoint(point);
+            if (index <= -1)
+            {
+                return;
+            }
+            var tempvar = Layer_listbox.SelectedIndex;
+            string data = (string)Layer_listbox.SelectedItem;
+            if (tempvar == index ||
+                index == 0 || 
+                index == Layer_listbox.Items.Count - 1 || 
+                Layer_listbox.SelectedIndex == 0 || 
+                Layer_listbox.SelectedIndex == Layer_listbox.Items.Count - 1)
+            {
+                return;
+            }
+            ignore = true;
+            if (tempvar < index) //Placing thing below (an index higher)
+            {
+                Layer_listbox.Items.Insert(index+1, data); //+1 to put it in front
+                layers.Insert(index+1, layers[tempvar]);
+                //Indexes dont matter, as the item was placed above the selected index
+                Layer_listbox.Items.RemoveAt(tempvar); //Remove the item
+                layers.RemoveAt(tempvar);
+            }
+            else
+            {
+                Layer_listbox.Items.Insert(index, data);
+                layers.Insert(index, layers[tempvar]);
+                //All indexes shifted up by 1
+                Layer_listbox.Items.RemoveAt(tempvar + 1); //Remove the item
+                layers.RemoveAt(tempvar + 1);
+            }
+            Layer_listbox.SelectedIndex = index;
+            lastindex = index;
+            LayerIndex_textbox.Text = index.ToString();
+            ignore = false; //Stop onselectindexchanged running for listbox
+        }
+
+        private void Layer_listbox_DragOver(object sender, DragEventArgs e)
+        {
+            e.Effect = DragDropEffects.Move;
+        }
+
+        private void Layer_listbox_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (this.Layer_listbox.SelectedItem != null && (Control.ModifierKeys & Keys.Control) != 0)
+            {
+                this.Layer_listbox.DoDragDrop(this.Layer_listbox.SelectedItem, DragDropEffects.Move);
+            }
+        }
+
+        private void Layer_listbox_DragEnter(object sender, DragEventArgs e)
+        {
         }
     }
 }

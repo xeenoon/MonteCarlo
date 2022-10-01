@@ -704,6 +704,7 @@
             // 
             // Layer_listbox
             // 
+            this.Layer_listbox.AllowDrop = true;
             this.Layer_listbox.FormattingEnabled = true;
             this.Layer_listbox.ItemHeight = 14;
             this.Layer_listbox.Items.AddRange(new object[] {
@@ -714,6 +715,10 @@
             this.Layer_listbox.Size = new System.Drawing.Size(187, 88);
             this.Layer_listbox.TabIndex = 1;
             this.Layer_listbox.SelectedIndexChanged += new System.EventHandler(this.Layer_listbox_SelectedIndexChanged);
+            this.Layer_listbox.DragDrop += new System.Windows.Forms.DragEventHandler(this.Layer_listbox_DragDrop);
+            this.Layer_listbox.DragEnter += new System.Windows.Forms.DragEventHandler(this.Layer_listbox_DragEnter);
+            this.Layer_listbox.DragOver += new System.Windows.Forms.DragEventHandler(this.Layer_listbox_DragOver);
+            this.Layer_listbox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Layer_listbox_MouseDown);
             // 
             // label7
             // 
