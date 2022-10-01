@@ -19,7 +19,7 @@ namespace MonteCarlo
         {
             InitializeComponent();
 
-            models.Add(new TorchNetwork("Default_ML", 42, 7, string.Format(@"C:\Users\{0}\Downloads\Default.TML",Environment.UserName),true, 0.0005, Log,1000));
+            models.Add(new TorchNetwork("Default_ML", layers, string.Format(@"C:\Users\{0}\Downloads\Default.TML",Environment.UserName),true, 0.0005, Log,1000));
 
             GreenPlayerBox.Items.Clear();
             GreenPlayerBox.Items.Add("Human");
@@ -453,8 +453,8 @@ namespace MonteCarlo
             ModelPanel.Visible = true;
             layers = new List<Layer>() { Layer.BeginLinear, Layer.EndLinear };
             Layer_listbox.Items.Clear();
-            Layer_listbox.Items.Add("Linear (fixed input)");
-            Layer_listbox.Items.Add("Linear (fixed output)");
+            Layer_listbox.Items.Add("Linear (fixed)");
+            Layer_listbox.Items.Add("Linear (fixed)");
         }
 
         private void DeleteButton_Click(object sender, EventArgs e)
@@ -482,7 +482,7 @@ namespace MonteCarlo
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 var path = Path.GetFullPath(openFileDialog1.FileName);
-                TorchNetwork toadd = new TorchNetwork(path.Split("\\").Last(), 42, 7, path, true, 0.0005, Log, 1000);
+                TorchNetwork toadd = new TorchNetwork(path.Split("\\").Last(), layers, path, true, 0.0005, Log, 1000);
                 selectedModel.load(path);
                 ShowAIData();
             }
@@ -558,7 +558,7 @@ namespace MonteCarlo
                 random = r.Next();
                 randomname = "RandomName" + random;
             }
-            var model = new TorchNetwork(randomname, 42, 7, string.Format(@"C:\Users\{0}\Downloads\{1}.TML", Environment.UserName, randomname), true, 0.0005, Log, 1000);
+            var model = new TorchNetwork(randomname, layers, string.Format(@"C:\Users\{0}\Downloads\{1}.TML", Environment.UserName, randomname), true, 0.0005, Log, 1000);
 
             AI_List.Items.Add(randomname);
             models.Add(model);
@@ -600,11 +600,174 @@ namespace MonteCarlo
             Stride_label.Enabled = false;
             Stride_textbox.Enabled = false;
             Stride_textbox.Text = "";
-        }
 
+            lastindex = -1;
+        }
+        int lastindex = -1;
+        bool ignore = false;
         private void Layer_listbox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ShowModelData(Layer_listbox.SelectedIndex, layers[Layer_listbox.SelectedIndex]);
+            if (ignore)
+            {
+                return;
+            }
+            int select_idx = Layer_listbox.SelectedIndex;
+            if (SaveModelData() || lastindex == -1)
+            {
+                ignore = true;
+                Layer_listbox.SelectedIndex = select_idx; //Just in case savemodeldata changed it while saving
+
+                ShowModelData(Layer_listbox.SelectedIndex, layers[Layer_listbox.SelectedIndex]);
+                ignore = false;
+                lastindex = Layer_listbox.SelectedIndex;
+            }
+            else
+            {
+                Layer_listbox.SelectedIndex = lastindex;
+            }
+        }
+
+        private bool SaveModelData()
+        {
+            if (lastindex == -1)
+            {
+                return false;
+            }
+            var layer = layers[lastindex];
+            if (!int.TryParse(InputSize_textbox.Text, out int inputsize))
+            {
+                var response = MessageBox.Show("Invalid input for \"input size\", continue anyway?", "Invalid input", MessageBoxButtons.YesNo);
+                if (response == DialogResult.Yes)
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                layer.inputsize = inputsize;
+            }
+
+            if (!int.TryParse(OutputSize_textbox.Text, out int outputsize))
+            {
+                var response = MessageBox.Show("Invalid input for \"output size\", continue anyway?", "Invalid input", MessageBoxButtons.YesNo);
+                if (response == DialogResult.Yes)
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                layer.outputsize = outputsize;
+            }
+
+            if (!int.TryParse(Stride_textbox.Text, out int stridesize) && Stride_textbox.Text != "")
+            {
+                var response = MessageBox.Show("Invalid input for \"stride size\", continue anyway?", "Invalid input", MessageBoxButtons.YesNo);
+                if (response == DialogResult.Yes)
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                layer.stridesize = stridesize;
+            }
+
+            if (TransformationType_combobox.SelectedIndex == 0) //Linear
+            {
+                layer.type = Layer.LayerType.Linear;
+                ignore = true;
+
+                Layer_listbox.Items.RemoveAt(lastindex); //remove the element
+                Layer_listbox.Items.Insert(lastindex, "Linear (fc1)"); //re-insert the replacement element
+                Layer_listbox.SelectedIndex = lastindex;
+
+                ignore = false;
+            }
+            else
+            {
+                layer.type = Layer.LayerType.Convolutional;
+                ignore = true;
+                
+                Layer_listbox.Items.RemoveAt(lastindex); //remove the element
+                Layer_listbox.Items.Insert(lastindex, "Convolutional (fc1)"); //re-insert the replacement element
+                Layer_listbox.SelectedIndex = lastindex;
+
+                ignore = false;
+            }
+
+            if (lastindex == 0) //First item?
+            {
+                if (TransformationType_combobox.SelectedIndex == 0) //Linear
+                {
+                    layer.type = Layer.LayerType.Linear;
+                    ignore = true;
+
+                    Layer_listbox.Items.RemoveAt(lastindex); //remove the element
+                    Layer_listbox.Items.Insert(lastindex, "Linear (fixed)"); //re-insert the replacement element
+                    Layer_listbox.SelectedIndex = lastindex;
+
+                    ignore = false;
+                }
+                else
+                {
+                    layer.type = Layer.LayerType.Convolutional;
+                    ignore = true;
+
+                    Layer_listbox.Items.RemoveAt(lastindex); //remove the element
+                    Layer_listbox.Items.Insert(lastindex, "Convolutional (fixed)"); //re-insert the replacement element
+                    Layer_listbox.SelectedIndex = lastindex;
+
+                    ignore = false;
+                }
+            }
+            else if(lastindex == Layer_listbox.Items.Count-1)
+            {
+                layer.type = Layer.LayerType.Linear;
+                ignore = true;
+
+                Layer_listbox.Items.RemoveAt(lastindex); //remove the element
+                Layer_listbox.Items.Insert(lastindex, "Linear (fixed)"); //re-insert the replacement element
+                Layer_listbox.SelectedIndex = lastindex;
+
+                ignore = false;
+            }
+
+            if (!int.TryParse(LayerIndex_textbox.Text, out int layerindex))
+            {
+                var response = MessageBox.Show("Invalid input for \"layer index\", continue anyway?", "Invalid input", MessageBoxButtons.YesNo);
+                if (response == DialogResult.Yes)
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                if (layerindex != lastindex)
+                {
+                    ignore = true;
+                    if (lastindex <= layerindex) //Placing thing below (an index higher)
+                    {
+                        Layer_listbox.Items.Insert(layerindex, Layer_listbox.Items[lastindex]);
+                        layers.Insert(layerindex, layers[lastindex]);
+                        //Indexes dont matter, as the item was placed above the selected index
+                        Layer_listbox.Items.RemoveAt(lastindex); //Remove the item
+                        layers.RemoveAt(lastindex);
+                    }
+                    else
+                    {
+                        Layer_listbox.Items.Insert(layerindex, Layer_listbox.Items[lastindex]);
+                        layers.Insert(layerindex, layers[lastindex]);
+                        //All indexes shifted up by 1
+                        Layer_listbox.Items.RemoveAt(lastindex + 1); //Remove the item
+                        layers.RemoveAt(lastindex+1);
+                    }
+                    lastindex = Layer_listbox.SelectedIndex;
+                    ignore = false; //Stop onselectindexchanged running for listbox
+                }
+            }
+
+            return true;
         }
 
         private void TransformationType_combobox_SelectedIndexChanged(object sender, EventArgs e)
@@ -625,6 +788,17 @@ namespace MonteCarlo
                 layers[TransformationType_combobox.SelectedIndex].stridesize = 0;
                 Stride_textbox.Text = "";
             }
+
+            if (!ignore)
+            {
+                SaveModelData();
+            }
+        }
+
+        private void button1_Click_2(object sender, EventArgs e)
+        {
+            lastindex = Layer_listbox.SelectedIndex;
+            SaveModelData();
         }
     }
 }

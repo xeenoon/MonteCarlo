@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.label1 = new System.Windows.Forms.Label();
             this.RedPlayerBox = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
@@ -68,6 +69,7 @@
             this.AI_List = new System.Windows.Forms.ListBox();
             this.label5 = new System.Windows.Forms.Label();
             this.ModelPanel = new System.Windows.Forms.Panel();
+            this.Apply_button = new System.Windows.Forms.Button();
             this.LayerIndex_textbox = new System.Windows.Forms.TextBox();
             this.LayerIndex_label = new System.Windows.Forms.Label();
             this.Delete_button = new System.Windows.Forms.Button();
@@ -86,6 +88,7 @@
             this.label8 = new System.Windows.Forms.Label();
             this.Layer_listbox = new System.Windows.Forms.ListBox();
             this.label7 = new System.Windows.Forms.Label();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.AI_Settings_Panel.SuspendLayout();
@@ -509,6 +512,7 @@
             // ModelPanel
             // 
             this.ModelPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.ModelPanel.Controls.Add(this.Apply_button);
             this.ModelPanel.Controls.Add(this.LayerIndex_textbox);
             this.ModelPanel.Controls.Add(this.LayerIndex_label);
             this.ModelPanel.Controls.Add(this.Delete_button);
@@ -533,6 +537,17 @@
             this.ModelPanel.TabIndex = 10;
             this.ModelPanel.Visible = false;
             // 
+            // Apply_button
+            // 
+            this.Apply_button.Font = new System.Drawing.Font("Microsoft YaHei", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.Apply_button.Location = new System.Drawing.Point(5, 434);
+            this.Apply_button.Name = "Apply_button";
+            this.Apply_button.Size = new System.Drawing.Size(58, 24);
+            this.Apply_button.TabIndex = 47;
+            this.Apply_button.Text = "Apply";
+            this.Apply_button.UseVisualStyleBackColor = true;
+            this.Apply_button.Click += new System.EventHandler(this.button1_Click_2);
+            // 
             // LayerIndex_textbox
             // 
             this.LayerIndex_textbox.Location = new System.Drawing.Point(7, 322);
@@ -553,7 +568,7 @@
             // Delete_button
             // 
             this.Delete_button.Font = new System.Drawing.Font("Microsoft YaHei", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.Delete_button.Location = new System.Drawing.Point(5, 434);
+            this.Delete_button.Location = new System.Drawing.Point(71, 37);
             this.Delete_button.Name = "Delete_button";
             this.Delete_button.Size = new System.Drawing.Size(58, 24);
             this.Delete_button.TabIndex = 44;
@@ -563,7 +578,7 @@
             // Close2_button
             // 
             this.Close2_button.Font = new System.Drawing.Font("Microsoft YaHei", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.Close2_button.Location = new System.Drawing.Point(137, 434);
+            this.Close2_button.Location = new System.Drawing.Point(135, 434);
             this.Close2_button.Name = "Close2_button";
             this.Close2_button.Size = new System.Drawing.Size(58, 24);
             this.Close2_button.TabIndex = 43;
@@ -574,7 +589,7 @@
             // button2
             // 
             this.button2.Font = new System.Drawing.Font("Microsoft YaHei", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.button2.Location = new System.Drawing.Point(130, 39);
+            this.button2.Location = new System.Drawing.Point(130, 37);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(64, 24);
             this.button2.TabIndex = 32;
@@ -585,7 +600,7 @@
             // Create_button
             // 
             this.Create_button.Font = new System.Drawing.Font("Microsoft YaHei", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.Create_button.Location = new System.Drawing.Point(71, 434);
+            this.Create_button.Location = new System.Drawing.Point(70, 434);
             this.Create_button.Name = "Create_button";
             this.Create_button.Size = new System.Drawing.Size(58, 24);
             this.Create_button.TabIndex = 32;
@@ -692,8 +707,8 @@
             this.Layer_listbox.FormattingEnabled = true;
             this.Layer_listbox.ItemHeight = 14;
             this.Layer_listbox.Items.AddRange(new object[] {
-            "Linear (fixed input)",
-            "Linear (fixed output)"});
+            "Linear (fixed)",
+            "Linear (fixed)"});
             this.Layer_listbox.Location = new System.Drawing.Point(7, 63);
             this.Layer_listbox.Name = "Layer_listbox";
             this.Layer_listbox.Size = new System.Drawing.Size(187, 88);
@@ -803,5 +818,7 @@
         private Button Delete_button;
         private TextBox LayerIndex_textbox;
         private Label LayerIndex_label;
+        private Button Apply_button;
+        private ToolTip toolTip1;
     }
 }

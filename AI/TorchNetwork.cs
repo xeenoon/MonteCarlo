@@ -24,13 +24,8 @@ namespace AI
     }
     public class TorchNetwork : nn.Module, Model
     {
-        private Linear fc1;
-        private Linear fc2;
-
-        private Linear fc3;
-        private Linear fc4;
-
         public List<Layer> layers = new();
+
 
         public Linear actionHead;
         private Linear valueHead;
@@ -44,17 +39,14 @@ namespace AI
         public int depth { get; set; }
         public Func<string, bool> logger { get; set; }
 
-        public TorchNetwork(string nameID, int boardsize, int actionsize, string filepath, bool autosave, double learningrate, Func<string,bool> logger, int depth) : base(nameID)
+        public TorchNetwork(string nameID, List<Layer> nn_layers, string filepath, bool autosave, double learningrate, Func<string,bool> logger, int depth) : base(nameID)
         {
-            this.fc1 = nn.Linear(boardsize, 168);
-            this.fc2 = nn.Linear(168, 300);
-
-            this.fc3 = nn.Linear(300, 100);
-            this.fc4 = nn.Linear(100, 50);
+            this.layers = nn_layers;
 
 
-            this.actionHead = nn.Linear(50, actionsize);
-            this.valueHead = nn.Linear(50, 1);
+            this.actionHead = nn_layers.Last().GetLinear();
+            this.valueHead = nn.Linear(nn_layers[nn_layers.Count-2].outputsize, 1);
+            nn_layers.Remove(nn_layers.Last()); //Remove the last item from the list, we need to deal with this manually
 
             this.to(torch.device("cpu"));
             this.device = torch.device("cpu");
@@ -84,10 +76,10 @@ namespace AI
         }
         public TensorTuple Foward(Tensor x)
         {
-            x = nn.functional.relu(fc1.cpu().forward(x));
-            x = nn.functional.relu(fc2.cpu().forward(x)); //.foward????? only method that works
-            x = nn.functional.relu(fc3.cpu().forward(x));
-            x = nn.functional.relu(fc4.cpu().forward(x));
+            foreach (var layer in layers)
+            {
+                x = nn.functional.relu(layer.GetLinear().cpu().forward(x)); //Operate on the layers
+            }
 
             var action_logits = actionHead.forward(x);
             var value_logit = valueHead.forward(x);
@@ -233,12 +225,48 @@ namespace AI
             this.inputsize = inputsize;
             this.outputsize = outputsize;
             this.stridesize = stridesize;
+            if (type == LayerType.Linear)
+            {
+                linear = nn.Linear(inputsize, outputsize);
+            }
+            else
+            {
+                conv2D = nn.Conv2d(inputsize, outputsize, 4, stridesize);
+            }
         }
         public Layer(LayerType type, int inputsize, int outputsize)
         {
             this.type = type;
             this.inputsize = inputsize;
             this.outputsize = outputsize;
+
+            if (type == LayerType.Linear)
+            {
+                linear = nn.Linear(inputsize, outputsize);
+            }
+            else
+            {
+                conv2D = nn.Conv2d(inputsize, outputsize, 4, 1);
+            }
         }
+
+        public Linear GetLinear()
+        {
+            if (type != LayerType.Linear)
+            {
+                throw new Exception("Cannot call \"GetLinear()\" on a Convolutional layer");
+            }
+            return linear;
+        }
+        public Conv2d GetConvolutional()
+        {
+            if (type != LayerType.Linear)
+            {
+                throw new Exception("Cannot call \"GetLinear()\" on a Convolutional layer");
+            }
+            return conv2D;
+        }
+        private Linear linear;
+        private Conv2d conv2D;
     }
 }
