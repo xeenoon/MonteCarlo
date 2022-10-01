@@ -249,7 +249,7 @@ namespace AI
         }
         public Conv2d GetConvolutional()
         {
-            if (type != LayerType.Linear)
+            if (type != LayerType.Convolutional)
             {
                 throw new Exception("Cannot call \"GetLinear()\" on a Convolutional layer");
             }

@@ -676,7 +676,7 @@ namespace MonteCarlo
                     return false;
                 }
             }
-            else
+            else if(Stride_textbox.Text != "")
             {
                 layer.stridesize = stridesize;
             }
