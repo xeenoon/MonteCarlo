@@ -78,7 +78,14 @@ namespace AI
         {
             foreach (var layer in layers)
             {
-                x = nn.functional.relu(layer.GetLinear().cpu().forward(x)); //Operate on the layers
+                if (layer.type == Layer.LayerType.Linear)
+                {
+                    x = nn.functional.relu(layer.GetLinear().cpu().forward(x)); //Operate on the layers
+                }
+                else
+                {
+                    x = layer.GetConvolutional().cpu().forward(x); //Operate on the layers
+                }
             }
 
             var action_logits = actionHead.forward(x);
@@ -101,7 +108,6 @@ namespace AI
             
             var x = tuple.tensor1.cpu().data<float>().ToArray(); //Probability representation in board int[] format
             var y = tuple.tensor2.cpu().data <float>()[0]; //Array only ever has one item
-         //   float[] x1 = new float[7] { 0.14285714f, 0.14285714f, 0.14285714f, 0.14285714f, 0.14285714f, 0.14285714f, 0.14285714f};
             return new DoubleTuple(x, y);
         }
 
@@ -225,29 +231,12 @@ namespace AI
             this.inputsize = inputsize;
             this.outputsize = outputsize;
             this.stridesize = stridesize;
-            if (type == LayerType.Linear)
-            {
-                linear = nn.Linear(inputsize, outputsize);
-            }
-            else
-            {
-                conv2D = nn.Conv2d(inputsize, outputsize, 4, stridesize);
-            }
         }
         public Layer(LayerType type, int inputsize, int outputsize)
         {
             this.type = type;
             this.inputsize = inputsize;
             this.outputsize = outputsize;
-
-            if (type == LayerType.Linear)
-            {
-                linear = nn.Linear(inputsize, outputsize);
-            }
-            else
-            {
-                conv2D = nn.Conv2d(inputsize, outputsize, 4, 1);
-            }
         }
 
         public Linear GetLinear()
@@ -268,5 +257,18 @@ namespace AI
         }
         private Linear linear;
         private Conv2d conv2D;
+
+        public void Setup()
+        {
+
+            if (type == LayerType.Linear)
+            {
+                linear = nn.Linear(inputsize, outputsize);
+            }
+            else
+            {
+                conv2D = nn.Conv2d(inputsize, outputsize, 4, stridesize);
+            }
+        }
     }
 }

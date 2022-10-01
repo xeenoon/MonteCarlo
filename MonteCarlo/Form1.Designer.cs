@@ -574,6 +574,7 @@
             this.Delete_button.TabIndex = 44;
             this.Delete_button.Text = "Delete";
             this.Delete_button.UseVisualStyleBackColor = true;
+            this.Delete_button.Click += new System.EventHandler(this.Delete_button_Click);
             // 
             // Close2_button
             // 

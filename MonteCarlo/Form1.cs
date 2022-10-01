@@ -491,10 +491,14 @@ namespace MonteCarlo
         private void button2_Click(object sender, EventArgs e)
         {
             Layer_listbox.Items.Insert(1,"Linear (fc1)");
-            Layer item = new Layer(Layer.LayerType.Linear, layers[0].outputsize, layers[1].inputsize);
-            layers.Insert(1, item);
 
+            ignore = true;
+            lastindex = 1;
+            Layer item = new Layer(Layer.LayerType.Linear, layers[0].outputsize, layers[1].inputsize);
             ShowModelData(1, item);
+            layers.Insert(1, item);
+            ignore = false;
+            Layer_listbox.SelectedIndex = 1; //Update the listbox
         }
 
         private void ShowModelData(int index, Layer layer)
@@ -557,6 +561,10 @@ namespace MonteCarlo
             {
                 random = r.Next();
                 randomname = "RandomName" + random;
+            }
+            foreach (var layer in layers)
+            {
+                layer.Setup();
             }
             var model = new TorchNetwork(randomname, layers, string.Format(@"C:\Users\{0}\Downloads\{1}.TML", Environment.UserName, randomname), true, 0.0005, Log, 1000);
 
@@ -869,6 +877,49 @@ namespace MonteCarlo
 
         private void Layer_listbox_DragEnter(object sender, DragEventArgs e)
         {
+        }
+
+        private void Delete_button_Click(object sender, EventArgs e)
+        {
+            if (Layer_listbox.SelectedIndex >= 1 && Layer_listbox.SelectedIndex <= Layer_listbox.Items.Count -2)
+            {
+                ignore = true;
+                layers.RemoveAt(Layer_listbox.SelectedIndex);
+                Layer_listbox.Items.RemoveAt(Layer_listbox.SelectedIndex);
+
+
+                TransformationType_label.Enabled = false;
+
+                if (TransformationType_combobox.SelectedIndex != -1)
+                {
+                    TransformationType_combobox.Enabled = true; //Make sure it is active, allowing us to do the operation
+
+                    TransformationType_combobox.Items.Add("");
+                    TransformationType_combobox.SelectedIndex = 2;
+                }
+                TransformationType_combobox.Enabled = false;
+
+                InputSize_label.Enabled = false;
+                InputSize_textbox.Enabled = false;
+                InputSize_textbox.Text = "";
+
+                OutputSize_label.Enabled = false;
+                OutputSize_textbox.Enabled = false;
+                OutputSize_textbox.Text = "";
+
+                LayerIndex_label.Enabled = false;
+                LayerIndex_textbox.Enabled = false;
+                LayerIndex_textbox.Text = "";
+
+
+                Convolution_label.Enabled = false;
+                Stride_label.Enabled = false;
+                Stride_textbox.Enabled = false;
+                Stride_textbox.Text = "";
+
+                lastindex = -1;
+                ignore = false;
+            }
         }
     }
 }
