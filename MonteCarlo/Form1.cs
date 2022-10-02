@@ -587,7 +587,14 @@ namespace MonteCarlo
                 TransformationType_combobox.Enabled = true; //Make sure it is active, allowing us to do the operation
 
                 TransformationType_combobox.Items.Add("");
-                TransformationType_combobox.SelectedIndex = 2;
+                try
+                {
+                    TransformationType_combobox.SelectedIndex = 2;
+                }
+                catch
+                {
+                    
+                }
             }
             TransformationType_combobox.Enabled = false;
             
@@ -790,12 +797,12 @@ namespace MonteCarlo
 
         private void TransformationType_combobox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (TransformationType_combobox.SelectedIndex == 1)
+            if (TransformationType_combobox.SelectedIndex == 1 && layers[Layer_listbox.SelectedIndex].type != Layer.LayerType.Convolutional)
             {
                 Convolution_label.Enabled = true;
                 Stride_label.Enabled = true;
                 Stride_textbox.Enabled = true;
-                layers[TransformationType_combobox.SelectedIndex].stridesize = 1;
+                layers[Layer_listbox.SelectedIndex].stridesize = 1;
                 Stride_textbox.Text = "1";
             }
             else
@@ -803,7 +810,6 @@ namespace MonteCarlo
                 Convolution_label.Enabled = false;
                 Stride_label.Enabled = false;
                 Stride_textbox.Enabled = false;
-                layers[TransformationType_combobox.SelectedIndex].stridesize = 0;
                 Stride_textbox.Text = "";
             }
 

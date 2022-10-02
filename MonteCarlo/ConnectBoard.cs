@@ -57,7 +57,14 @@ namespace MonteCarlo
             }
 
             int squareloc = location.X + location.Y * width;
-            return squares[squareloc];
+            try
+            {
+                return squares[squareloc];
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         public void Draw(Graphics g)

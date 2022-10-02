@@ -220,7 +220,12 @@ namespace AI
         public int inputsize;
         public int outputsize;
 
-        public int stridesize;
+        private int STRIDESIZE = 1;
+        public int stridesize
+        {
+            get { return STRIDESIZE; }
+            set { STRIDESIZE = value; }
+        }
 
         public static Layer BeginConv   = new Layer(LayerType.Convolutional, 42, 4, 1);
         public static Layer BeginLinear = new Layer(LayerType.Linear       , 42, 60);
