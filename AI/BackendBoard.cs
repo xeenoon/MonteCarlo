@@ -152,6 +152,19 @@ namespace Game
             return new GameResult(false, 0); //Unfinished game
         }
 
+        internal float[,] Get2d()
+        {
+            float[,] output = new float[height, width];
+            for (int i = 0; i < height; i++)
+            {
+                for (int j = 0; j < width; j++)
+                {
+                    output[i, j] = board[i * width + j];
+                }
+            }
+            return output;
+        }
+
         public int GetReward(int player)
         {
             var result = GameResult();

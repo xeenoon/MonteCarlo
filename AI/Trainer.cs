@@ -161,7 +161,7 @@ namespace AI
             Log("Start pos result:");
             //Console.WriteLine(LastPiExamples[0].ToList().ToArray().Write());
             //Console.WriteLine(LastProbExamples.ToList().ToArray().Write());
-            Log(model.Predict(new BackendBoard(6, 7, 4).board).probabilities.Write());
+            Log(model.Predict(new BackendBoard(6, 7, 4).Get2d()).probabilities.Write());
             optimizer.Dispose();
             if (model.autosave)
             {

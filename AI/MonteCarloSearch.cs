@@ -126,7 +126,7 @@ namespace AI
                 var root = new Node(0,toplay);
      
                 //Expanding root
-                var m_action = model.Predict(board_state.board);
+                var m_action = model.Predict(board_state.Get2d());
                 var action_probs = m_action.probabilities;
                 var value = m_action.v;
                 var validmoves = board_state.ValidMoveMask();
@@ -162,7 +162,7 @@ namespace AI
                         //ZOOM IN AND ENHANCE
                         //(Expand)
 
-                        m_action = model.Predict(nextboardstate.board);
+                        m_action = model.Predict(nextboardstate.Get2d());
                         action_probs = m_action.probabilities;
                         value = m_action.v;
                         validmoves = nextboardstate.ValidMoveMask();

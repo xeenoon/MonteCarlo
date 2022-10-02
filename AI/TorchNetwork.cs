@@ -131,7 +131,7 @@ namespace AI
             {
                 s = 1; //Reset s to 1
             }
-            var probabilities = Predict(game.board).probabilities.Multiply(game.ValidMoveMask());
+            var probabilities = Predict(game.Get2d()).probabilities.Multiply(game.ValidMoveMask());
             double max = double.MinValue;
             int bestmove = 0;
             for (int i = 0; i < probabilities.Length; ++i)
@@ -252,16 +252,16 @@ namespace AI
             }
             return linear;
         }
-        public Conv2d GetConvolutional()
+        public Conv1d GetConvolutional()
         {
             if (type != LayerType.Convolutional)
             {
-                throw new Exception("Cannot call \"GetLinear()\" on a Convolutional layer");
+                throw new Exception("Cannot call \"GetConvolutional()\" on a Linear layer");
             }
-            return conv2D;
+            return conv1D;
         }
         private Linear linear;
-        private Conv2d conv2D;
+        private Conv1d conv1D;
 
         public void Setup()
         {
@@ -272,7 +272,7 @@ namespace AI
             }
             else
             {
-                conv2D = nn.Conv2d(inputsize, outputsize, 4, stridesize);
+                conv1D = nn.Conv1d(42, 60, 7, stridesize);
             }
         }
     }
